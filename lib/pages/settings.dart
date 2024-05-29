@@ -58,7 +58,7 @@ class _SettingState extends State<Setting> {
                 ),
                 child: null,
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ListTile(
                 //leading: Icon(Icons.category),
                 title: const Text(
@@ -75,7 +75,7 @@ class _SettingState extends State<Setting> {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Row(
                       children: [
                         Icon(Icons.person,
@@ -89,7 +89,7 @@ class _SettingState extends State<Setting> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
                         Icon(Icons.list_alt,
@@ -103,7 +103,7 @@ class _SettingState extends State<Setting> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
                         Icon(Icons.cake,
@@ -117,15 +117,15 @@ class _SettingState extends State<Setting> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
-              Divider(height: 2),
+              const Divider(height: 2),
               ListTile(
                 leading: Icon(Icons.reorder,
                     size: 30, color: Colors.blueAccent[100]),
-                title: Text('Reorder Tasks'),
+                title: const Text('Reorder Tasks'),
                 onTap: () {
                   // Add your onTap logic for item 1 here
                 },
@@ -133,7 +133,7 @@ class _SettingState extends State<Setting> {
               ListTile(
                 leading: Icon(Icons.workspace_premium,
                     size: 30, color: Colors.blueAccent[100]),
-                title: Text('Premium'),
+                title: const Text('Premium'),
                 onTap: () {
                   // Add your onTap logic for item 2 here
                 },
@@ -141,7 +141,7 @@ class _SettingState extends State<Setting> {
               ListTile(
                 leading:
                     Icon(Icons.star, size: 30, color: Colors.blueAccent[100]),
-                title: Text('Rate us'),
+                title: const Text('Rate us'),
                 onTap: () {
                   // Add your onTap logic for item 2 here
                 },
@@ -149,7 +149,7 @@ class _SettingState extends State<Setting> {
               ListTile(
                 leading: Icon(Icons.settings,
                     size: 30, color: Colors.blueAccent[100]),
-                title: Text('Setting'),
+                title: const Text('Setting'),
                 onTap: () {
                   Navigator.pushNamed(context, '/setting');
                 },
@@ -158,7 +158,7 @@ class _SettingState extends State<Setting> {
           ),
         ),
         body: Container(
-          margin: EdgeInsets.fromLTRB(10, 30, 0, 10),
+          margin: const EdgeInsets.fromLTRB(10, 30, 0, 10),
           height: 250,
           width: 340,
           child: Padding(
@@ -188,7 +188,7 @@ class _SettingState extends State<Setting> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     Icon(Icons.share,color: Colors.blueAccent[100],size: 24,),
@@ -203,7 +203,7 @@ class _SettingState extends State<Setting> {
                     ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Row(
                   children: [
                     Icon(Icons.thumb_up_sharp,size: 24,color: Colors.blueAccent[100],),

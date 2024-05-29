@@ -53,12 +53,12 @@ class _SecondscreenState extends State<Secondscreen> {
                 decoration: BoxDecoration(
                   color: Colors.blue,
                   gradient: LinearGradient(
-                      colors: [Colors.deepPurpleAccent, Colors.purple],
+                      colors: [Colors.deepPurpleAccent, Colors.cyanAccent],
                       begin: Alignment.centerRight,
                       end: Alignment(-1.0, -1.0)),
                 ),
                 child: null),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ListTile(
               //leading: Icon(Icons.category),
               title: const Text(
@@ -74,7 +74,7 @@ class _SecondscreenState extends State<Secondscreen> {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Row(
                     children: [
                       Icon(Icons.person,
@@ -88,7 +88,7 @@ class _SecondscreenState extends State<Secondscreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Icon(Icons.list_alt,
@@ -102,7 +102,7 @@ class _SecondscreenState extends State<Secondscreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Row(
                     children: [
                       Icon(Icons.cake, size: 30, color: Colors.blueAccent[100]),
@@ -115,15 +115,15 @@ class _SecondscreenState extends State<Secondscreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
-            Divider(height: 2),
+            const Divider(height: 2),
             ListTile(
               leading:
                   Icon(Icons.reorder, size: 30, color: Colors.blueAccent[100]),
-              title: Text('Reorder Tasks'),
+              title: const Text('Reorder Tasks'),
               onTap: () {
                 // Add your onTap logic for item 1 here
               },
@@ -131,7 +131,7 @@ class _SecondscreenState extends State<Secondscreen> {
             ListTile(
               leading: Icon(Icons.workspace_premium,
                   size: 30, color: Colors.blueAccent[100]),
-              title: Text('Premium'),
+              title: const Text('Premium'),
               onTap: () {
                 // Add your onTap logic for item 2 here
               },
@@ -139,7 +139,7 @@ class _SecondscreenState extends State<Secondscreen> {
             ListTile(
               leading:
                   Icon(Icons.star, size: 30, color: Colors.blueAccent[100]),
-              title: Text('Rate us'),
+              title: const Text('Rate us'),
               onTap: () {
                 // Add your onTap logic for item 2 here
               },
@@ -147,7 +147,7 @@ class _SecondscreenState extends State<Secondscreen> {
             ListTile(
               leading:
                   Icon(Icons.settings, size: 30, color: Colors.blueAccent[100]),
-              title: Text('Setting'),
+              title: const Text('Setting'),
               onTap: () {
                 // Navigator.pushNamed(context, '/');
                 // // Simulate a delay for loading
@@ -155,9 +155,9 @@ class _SecondscreenState extends State<Secondscreen> {
                 //   Duration(seconds: 5),
                 //   ()
                 //   {
-                    Navigator.pushReplacementNamed(context, '/first');
-                  // },
-               // );
+                Navigator.pushReplacementNamed(context, '/first');
+                // },
+                // );
               },
             ),
           ],

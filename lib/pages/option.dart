@@ -9,8 +9,8 @@ class MenuAnchorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const MenuAnchorExample(),
+    return const MaterialApp(
+      home: MenuAnchorExample(),
     );
   }
 }

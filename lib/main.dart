@@ -8,11 +8,11 @@ import 'pages/settings.dart';
 void main() => runApp(MaterialApp(
       initialRoute: '/front',
       routes: {
-        '/': (context) => Loading(),
-        '/front': (context) => Frontscreen(),
-        '/first': (context) => Firstscreen(),
-        '/second': (context) => Secondscreen(),
-        '/setting': (context) => Setting(),
+        '/': (context) => const Loading(),
+        '/front': (context) => const Frontscreen(),
+        '/first': (context) => const Firstscreen(),
+        '/second': (context) => const Secondscreen(),
+        '/setting': (context) => const Setting(),
         // '/opt': (context) => MenuAnchorApp(),
       },
     ));

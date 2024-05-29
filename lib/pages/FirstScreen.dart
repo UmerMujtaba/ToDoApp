@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'todo.dart';
 
-import 'option.dart';
-
 class Firstscreen extends StatefulWidget {
   const Firstscreen({Key? key}) : super(key: key);
 
@@ -16,7 +14,6 @@ class _FirstscreenState extends State<Firstscreen> {
   final TextEditingController _textFieldController = TextEditingController();
   final TextEditingController _textFieldController2 = TextEditingController();
   final TextEditingController _textFieldController3 = TextEditingController();
-  final TextEditingController _textFieldController4 = TextEditingController();
 
   //Handle Change function for todo list
   void handleTodoChange(Todo todo) {
@@ -46,11 +43,10 @@ class _FirstscreenState extends State<Firstscreen> {
     _textFieldController.clear();
     _textFieldController2.clear();
     _textFieldController3.clear();
-    _textFieldController4.clear();
   }
 
   //dialog box func along with the text field and add & cancel buttons
-  Future<void> Display() async {
+  Future<void> display() async {
     String selectedText = 'Medium';
     return showDialog<void>(
       context: context,
@@ -265,18 +261,18 @@ class _FirstscreenState extends State<Firstscreen> {
       endDrawer: SafeArea(
         child: Drawer(
           child: ListView(
-            padding: EdgeInsets.zero,
             children: <Widget>[
               const DrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    gradient: LinearGradient(
-                        colors: [Colors.deepPurpleAccent, Colors.purple],
-                        begin: Alignment.centerRight,
-                        end: Alignment(-1.0, -1.0)),
-                  ),
-                  child: null),
-              SizedBox(height: 20),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  gradient: LinearGradient(
+                      colors: [Colors.deepPurpleAccent, Colors.cyanAccent],
+                      begin: Alignment.centerRight,
+                      end: Alignment(-1.0, -1.0)),
+                ),
+                child: null,
+              ),
+              const SizedBox(height: 20),
               ListTile(
                 //leading: Icon(Icons.category),
                 title: const Text(
@@ -292,7 +288,7 @@ class _FirstscreenState extends State<Firstscreen> {
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Row(
                       children: [
                         Icon(Icons.person,
@@ -306,7 +302,7 @@ class _FirstscreenState extends State<Firstscreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
                         Icon(Icons.list_alt,
@@ -320,10 +316,11 @@ class _FirstscreenState extends State<Firstscreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       children: [
-                        Icon(Icons.cake, size: 30, color: Colors.blueAccent[100]),
+                        Icon(Icons.cake,
+                            size: 30, color: Colors.blueAccent[100]),
                         const Padding(
                           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                           child: Text(
@@ -333,15 +330,15 @@ class _FirstscreenState extends State<Firstscreen> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
-              Divider(height: 2),
+              const Divider(height: 2),
               ListTile(
-                leading:
-                    Icon(Icons.reorder, size: 30, color: Colors.blueAccent[100]),
-                title: Text('Reorder Tasks'),
+                leading: Icon(Icons.reorder,
+                    size: 30, color: Colors.blueAccent[100]),
+                title: const Text('Reorder Tasks'),
                 onTap: () {
                   // Add your onTap logic for item 1 here
                 },
@@ -349,7 +346,7 @@ class _FirstscreenState extends State<Firstscreen> {
               ListTile(
                 leading: Icon(Icons.workspace_premium,
                     size: 30, color: Colors.blueAccent[100]),
-                title: Text('Premium'),
+                title: const Text('Premium'),
                 onTap: () {
                   // Add your onTap logic for item 2 here
                 },
@@ -357,15 +354,15 @@ class _FirstscreenState extends State<Firstscreen> {
               ListTile(
                 leading:
                     Icon(Icons.star, size: 30, color: Colors.blueAccent[100]),
-                title: Text('Rate us'),
+                title: const Text('Rate us'),
                 onTap: () {
                   // Add your onTap logic for item 2 here
                 },
               ),
               ListTile(
-                leading:
-                Icon(Icons.settings, size: 30, color: Colors.blueAccent[100]),
-                title: Text('Setting'),
+                leading: Icon(Icons.settings,
+                    size: 30, color: Colors.blueAccent[100]),
+                title: const Text('Setting'),
                 onTap: () {
                   Navigator.pushReplacementNamed(context, '/setting');
                 },
@@ -390,7 +387,6 @@ class _FirstscreenState extends State<Firstscreen> {
                         Icons.search,
                         color: Colors.grey,
                         size: 30,
-
                       ),
                       SizedBox(width: 10),
                       Icon(
@@ -407,7 +403,7 @@ class _FirstscreenState extends State<Firstscreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 const Row(
                   children: [
                     Padding(
@@ -446,7 +442,7 @@ class _FirstscreenState extends State<Firstscreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               Padding(
-                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                 child: Icon(
                                   Icons.person_rounded,
                                   color: Colors.white,
@@ -537,11 +533,11 @@ class _FirstscreenState extends State<Firstscreen> {
                 ),
                 const SizedBox(height: 20),
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   child: ListView(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    padding: EdgeInsets.all(8),
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.all(8),
                     children: todos.map((Todo todo) {
                       return TodoItem(
                           todo: todo,
@@ -554,7 +550,7 @@ class _FirstscreenState extends State<Firstscreen> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            onPressed: () => Display(),
+            onPressed: () => display(),
             tooltip: 'Add a Todo',
             child: const Icon(Icons.add),
           ),
@@ -644,11 +640,7 @@ class TodoItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                // IconButton(
-                //   icon: const Icon(Icons.check),
-                //   onPressed: () => onTodoChanged(todo),
-                //   color: todo.completed ? Colors.green : Colors.grey,
-                // ),
+
                 IconButton(
                   icon: const Icon(Icons.delete),
                   onPressed: () => removeTodo(todo),
