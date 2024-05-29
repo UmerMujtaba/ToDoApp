@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../component/DrawerCheck.dart';
+import 'barcheck.dart';
 import 'todo.dart';
-
+import 'option.dart';
 class Firstscreen extends StatefulWidget {
   const Firstscreen({Key? key}) : super(key: key);
 
@@ -45,7 +47,11 @@ class _FirstscreenState extends State<Firstscreen> {
     _textFieldController3.clear();
   }
 
-  //dialog box func along with the text field and add & cancel buttons
+
+  //dialog box for more-horizontal in list
+
+
+//dialog box func along with the text field and add & cancel buttons
   Future<void> display() async {
     String selectedText = 'Medium';
     return showDialog<void>(
@@ -225,337 +231,190 @@ class _FirstscreenState extends State<Firstscreen> {
     );
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _selectedTabIndex = 0;
-
-  void _onTabTapped(int index) {
-    if (index == 0) {
-      Navigator.pushNamed(context, '/first');
-    }
-    if (index == 1) {
-      _scaffoldKey.currentState?.openEndDrawer(); // Open the drawer
-    }
-    if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/second');
-    }
-    setState(() {
-      _selectedTabIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        currentIndex: _selectedTabIndex,
-        onTap: _onTabTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.note_alt), label: 'Notes'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month), label: 'Calendar'),
-        ],
-      ),
-      endDrawer: SafeArea(
-        child: Drawer(
-          child: ListView(
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  gradient: LinearGradient(
-                      colors: [Colors.deepPurpleAccent, Colors.cyanAccent],
-                      begin: Alignment.centerRight,
-                      end: Alignment(-1.0, -1.0)),
-                ),
-                child: null,
-              ),
-              const SizedBox(height: 20),
-              ListTile(
-                //leading: Icon(Icons.category),
-                title: const Text(
-                  'Categories',
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                onTap: () {
-                  // Add your onTap logic here
-                },
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              const Padding(
+                padding: EdgeInsets.all(12.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    const SizedBox(height: 30),
-                    Row(
-                      children: [
-                        Icon(Icons.person,
-                            size: 30, color: Colors.blueAccent[100]),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: Text(
-                            'Personal',
-                            style: TextStyle(fontSize: 16, color: Colors.black),
-                          ),
-                        ),
-                      ],
+                    Icon(
+                      Icons.search,
+                      color: Colors.grey,
+                      size: 30,
                     ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Icon(Icons.list_alt,
-                            size: 30, color: Colors.blueAccent[100]),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: Text(
-                            'Wishlist',
-                            style: TextStyle(fontSize: 16, color: Colors.black),
-                          ),
-                        ),
-                      ],
+                    SizedBox(width: 10),
+                    Icon(
+                      Icons.notifications,
+                      color: Colors.grey,
+                      size: 30,
                     ),
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Icon(Icons.cake,
-                            size: 30, color: Colors.blueAccent[100]),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                          child: Text(
-                            'Birthday',
-                            style: TextStyle(fontSize: 16, color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
+                    SizedBox(width: 10),
+                    Icon(
+                      Icons.more_horiz,
+                      color: Colors.grey,
+                      size: 30,
+                    )
                   ],
                 ),
               ),
-              const Divider(height: 2),
-              ListTile(
-                leading: Icon(Icons.reorder,
-                    size: 30, color: Colors.blueAccent[100]),
-                title: const Text('Reorder Tasks'),
-                onTap: () {
-                  // Add your onTap logic for item 1 here
-                },
+              const SizedBox(height: 20),
+              const Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(30, 5, 0, 20),
+                    child: Text(
+                      'Categories',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
-              ListTile(
-                leading: Icon(Icons.workspace_premium,
-                    size: 30, color: Colors.blueAccent[100]),
-                title: const Text('Premium'),
-                onTap: () {
-                  // Add your onTap logic for item 2 here
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Container(
+                    width: 150,
+                    height: 130,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.purple,
+                      gradient: LinearGradient(
+                          colors: [Colors.deepPurpleAccent, Colors.cyanAccent],
+                          begin: Alignment.centerRight,
+                          end: Alignment(-1.0, -1.0)),
+                    ),
+                    child: const Column(
+                      children: [
+                        SizedBox(height: 15),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Icon(
+                                Icons.person_rounded,
+                                color: Colors.white,
+                                size: 60,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(15, 14, 0, 0),
+                              child: Text(
+                                'Personal',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: 150,
+                    height: 130,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                      color: Colors.purple,
+                      gradient: LinearGradient(
+                          colors: [Colors.deepPurpleAccent, Colors.cyanAccent],
+                          begin: Alignment.centerRight,
+                          end: Alignment(-1.0, -1.0)),
+                    ),
+                    child: const Column(
+                      children: [
+                        SizedBox(height: 15),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                              child: Icon(
+                                Icons.calendar_month_rounded,
+                                color: Colors.white,
+                                size: 60,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(15, 14, 0, 0),
+                              child: Text(
+                                'Birthday',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              ListTile(
-                leading:
-                    Icon(Icons.star, size: 30, color: Colors.blueAccent[100]),
-                title: const Text('Rate us'),
-                onTap: () {
-                  // Add your onTap logic for item 2 here
-                },
+              const Padding(
+                padding: EdgeInsets.fromLTRB(30, 15, 0, 10),
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      'Today',
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
               ),
-              ListTile(
-                leading: Icon(Icons.settings,
-                    size: 30, color: Colors.blueAccent[100]),
-                title: const Text('Setting'),
-                onTap: () {
-                  Navigator.pushReplacementNamed(context, '/setting');
-                },
+              const SizedBox(height: 20),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(8),
+                  children: todos.map((Todo todo) {
+                    return TodoItem(
+                        todo: todo,
+                        onTodoChanged: handleTodoChange,
+                        removeTodo: _deleteTodo);
+                  }).toList(),
+                ),
               ),
             ],
           ),
         ),
       ),
-      body: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Icon(
-                        Icons.search,
-                        color: Colors.grey,
-                        size: 30,
-                      ),
-                      SizedBox(width: 10),
-                      Icon(
-                        Icons.notifications,
-                        color: Colors.grey,
-                        size: 30,
-                      ),
-                      SizedBox(width: 10),
-                      Icon(
-                        Icons.more_horiz,
-                        color: Colors.grey,
-                        size: 30,
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(30, 5, 0, 20),
-                      child: Text(
-                        'Categories',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    Container(
-                      width: 150,
-                      height: 130,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: Colors.purple,
-                        gradient: LinearGradient(
-                            colors: [
-                              Colors.deepPurpleAccent,
-                              Colors.cyanAccent
-                            ],
-                            begin: Alignment.centerRight,
-                            end: Alignment(-1.0, -1.0)),
-                      ),
-                      child: const Column(
-                        children: [
-                          SizedBox(height: 15),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Icon(
-                                  Icons.person_rounded,
-                                  color: Colors.white,
-                                  size: 60,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(15, 14, 0, 0),
-                                child: Text(
-                                  'Personal',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: 150,
-                      height: 130,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: Colors.purple,
-                        gradient: LinearGradient(
-                            colors: [
-                              Colors.deepPurpleAccent,
-                              Colors.cyanAccent
-                            ],
-                            begin: Alignment.centerRight,
-                            end: Alignment(-1.0, -1.0)),
-                      ),
-                      child: const Column(
-                        children: [
-                          SizedBox(height: 15),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-                                child: Icon(
-                                  Icons.calendar_month_rounded,
-                                  color: Colors.white,
-                                  size: 60,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(15, 14, 0, 0),
-                                child: Text(
-                                  'Birthday',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(30, 15, 0, 10),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        'Today',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.all(8),
-                    children: todos.map((Todo todo) {
-                      return TodoItem(
-                          todo: todo,
-                          onTodoChanged: handleTodoChange,
-                          removeTodo: _deleteTodo);
-                    }).toList(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () => display(),
-            tooltip: 'Add a Todo',
-            child: const Icon(Icons.add),
-          ),
-        ),
+      drawer: drawer(
+        title: 'New',
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => display(),
+        tooltip: 'Add a Todo',
+        child: const Icon(Icons.add),
+      ),
+      bottomNavigationBar: const bar(),
     );
   }
 }
@@ -579,6 +438,56 @@ class TodoItem extends StatelessWidget {
       decoration: TextDecoration.lineThrough,
     );
   }
+
+  // Future<void> showOptionsDialog(BuildContext context) async {
+  //   return showDialog<void>(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         content: const SizedBox(
+  //           width: 200,
+  //           height: 100, // Adjusted height for two rows
+  //           child: Column(
+  //             children: [
+  //               Row(
+  //                 children: [
+  //                   Text(
+  //                     'Update',
+  //                     style: TextStyle(color: Colors.black, fontSize: 14),
+  //                   ),
+  //                 ],
+  //               ),
+  //               SizedBox(height: 20),
+  //               Row(
+  //                 children: [
+  //                   Text(
+  //                     'Delete',
+  //                     style: TextStyle(color: Colors.black, fontSize: 14),
+  //                   ),
+  //                 ],
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           OutlinedButton(
+  //             style: OutlinedButton.styleFrom(
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(12),
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: const Text('Close'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  //
+  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -640,11 +549,13 @@ class TodoItem extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: () => removeTodo(todo),
-                  color: Colors.red,
+                  icon: const Icon(Icons.more_horiz),
+                  onPressed: () => {
+                  showOptionsDialog(context)
+                  },
+                  // onPressed: () => removeTodo(todo),
+                  color: Colors.grey,
                 ),
               ],
             ),

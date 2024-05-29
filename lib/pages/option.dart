@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [MenuAnchor].
 
 enum SampleItem { itemOne, itemTwo, itemThree }
 
@@ -9,8 +8,9 @@ class MenuAnchorApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: MenuAnchorExample(),
+    return MaterialApp(
+      theme: ThemeData(useMaterial3: true),
+      home: const MenuAnchorExample(),
     );
   }
 }
@@ -27,39 +27,67 @@ class _MenuAnchorExampleState extends State<MenuAnchorExample> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            MenuAnchor(
-              builder: (BuildContext context, MenuController controller,
-                  Widget? child) {
-                return IconButton(
-                  color: Colors.black,
-                  onPressed: () {
-                    if (controller.isOpen) {
-                      controller.close();
-                    } else {
-                      controller.open();
-                    }
-                  },
-                  icon: const Icon(Icons.more_horiz),
-                  tooltip: 'Show menu',
-                );
+    return MenuAnchor(
+          builder:
+              (BuildContext context, MenuController controller, Widget? child) {
+            return IconButton(
+              onPressed: () {
+                if (controller.isOpen) {
+                  controller.close();
+                } else {
+                  controller.open();
+                }
               },
-              menuChildren: List<MenuItemButton>.generate(
-                3,
-                (int index) => MenuItemButton(
-                  onPressed: () =>
-                      setState(() => selectedMenu = SampleItem.values[index]),
-                  child: Text('Item ${index + 1}'),
-                ),
-              ),
+              icon: const Icon(Icons.more_horiz),
+              tooltip: 'Show menu',
+            );
+          },
+          menuChildren: <MenuItemButton>[
+            MenuItemButton(
+              onPressed: () => showOptionsDialog(context),
+              child: const Text('Options'),
+            ),
+          ],
+
+    );
+  }
+}
+
+Future<void> showOptionsDialog(BuildContext context) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Text('Update'),
+              ],
+            ),
+            SizedBox(height: 20),
+            Row(
+              children: [
+                Text('Delete'),
+              ],
             ),
           ],
         ),
-      ),
-    );
-  }
+        actions: <Widget>[
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+        ],
+      );
+    },
+  );
 }

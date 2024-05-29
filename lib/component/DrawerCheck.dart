@@ -1,72 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-class Secondscreen extends StatefulWidget {
-  const Secondscreen({Key? key}) : super(key: key);
+class drawer extends StatefulWidget {
+  const drawer({super.key, required this.title});
+
+  final String title;
 
   @override
-  State<Secondscreen> createState() => _SecondscreenState();
+  State<drawer> createState() => _drawerState();
 }
 
-class _SecondscreenState extends State<Secondscreen> {
-  DateTime _selectedDay = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  int _selectedTabIndex = 0;
+class _drawerState extends State<drawer> {
+  int _selectedIndex = 0;
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    Text(
+      'Index 0: Home',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 1: Business',
+      style: optionStyle,
+    ),
+    Text(
+      'Index 2: School',
+      style: optionStyle,
+    ),
+  ];
 
-  void _onTabTapped(int index) {
-    if (index == 0) {
-      Navigator.pushNamed(context, '/first');
-    }
-    if (index == 1) {
-      _scaffoldKey.currentState?.openEndDrawer(); // Open the drawer
-    }
-    if (index == 2) {
-      Navigator.pushReplacementNamed(context, '/second');
-    }
+  void _onItemTapped(int index) {
     setState(() {
-      _selectedTabIndex = index;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        currentIndex: _selectedTabIndex,
-        onTap: _onTabTapped,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.note_alt), label: 'Notes'),
-          BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month), label: 'Calendar'),
-        ],
-      ),
-      endDrawer: Drawer(
+    return SizedBox(
+      width: MediaQuery.of(context).size.width *
+          0.75, // 75% of screen will be occupied
+      child: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             const DrawerHeader(
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                  gradient: LinearGradient(
-                      colors: [Colors.deepPurpleAccent, Colors.cyanAccent],
-                      begin: Alignment.centerRight,
-                      end: Alignment(-1.0, -1.0)),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                gradient: LinearGradient(
+                  colors: [Colors.deepPurpleAccent, Colors.blueAccent],
+                  begin: Alignment.centerRight,
+                  end: Alignment(-1.0, -1.0),
                 ),
-                child: null),
+              ),
+              child: null,
+            ),
             const SizedBox(height: 20),
             ListTile(
               //leading: Icon(Icons.category),
               title: const Text(
                 'Categories',
                 style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
               onTap: () {
                 // Add your onTap logic here
@@ -149,55 +146,10 @@ class _SecondscreenState extends State<Secondscreen> {
                   Icon(Icons.settings, size: 30, color: Colors.blueAccent[100]),
               title: const Text('Setting'),
               onTap: () {
-                // Navigator.pushNamed(context, '/');
-                // // Simulate a delay for loading
-                // Future.delayed(
-                //   Duration(seconds: 5),
-                //   ()
-                //   {
-                Navigator.pushReplacementNamed(context, '/first');
-                // },
-                // );
+                Navigator.pushNamed(context, '/setting');
               },
             ),
           ],
-        ),
-      ),
-      body: SafeArea(
-        child: Scaffold(
-          body: Column(
-            children: [
-              Expanded(
-                child: TableCalendar(
-                  firstDay: DateTime.utc(2010, 10, 16),
-                  lastDay: DateTime.utc(2030, 3, 14),
-                  focusedDay: DateTime.now(),
-                  selectedDayPredicate: (day) {
-                    return isSameDay(_selectedDay, day);
-                  },
-                  onDaySelected: (selectedDay, focusedDay) {
-                    setState(
-                      () {
-                        _selectedDay = selectedDay;
-                        _focusedDay =
-                            focusedDay; // update `_focusedDay` here as well
-                      },
-                    );
-                  },
-                  calendarFormat: _calendarFormat,
-                  onFormatChanged: (format) {
-                    setState(() {
-                      _calendarFormat = format;
-                    });
-                  },
-                  onPageChanged: (focusedDay) {
-                    _focusedDay = focusedDay;
-                  },
-                ),
-              ),
-            ],
-          ),
-          //bottomNavigationBar: Bar(),  // Use the custom bottom navigation bar
         ),
       ),
     );
