@@ -391,6 +391,7 @@ class _FirstscreenState extends State<Firstscreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
+
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(8),
@@ -419,6 +420,8 @@ class _FirstscreenState extends State<Firstscreen> {
   }
 }
 
+
+
 class TodoItem extends StatelessWidget {
   TodoItem(
       {required this.todo,
@@ -439,58 +442,15 @@ class TodoItem extends StatelessWidget {
     );
   }
 
-  // Future<void> showOptionsDialog(BuildContext context) async {
-  //   return showDialog<void>(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         content: const SizedBox(
-  //           width: 200,
-  //           height: 100, // Adjusted height for two rows
-  //           child: Column(
-  //             children: [
-  //               Row(
-  //                 children: [
-  //                   Text(
-  //                     'Update',
-  //                     style: TextStyle(color: Colors.black, fontSize: 14),
-  //                   ),
-  //                 ],
-  //               ),
-  //               SizedBox(height: 20),
-  //               Row(
-  //                 children: [
-  //                   Text(
-  //                     'Delete',
-  //                     style: TextStyle(color: Colors.black, fontSize: 14),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         actions: <Widget>[
-  //           OutlinedButton(
-  //             style: OutlinedButton.styleFrom(
-  //               shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(12),
-  //               ),
-  //             ),
-  //             onPressed: () {
-  //               Navigator.of(context).pop();
-  //             },
-  //             child: const Text('Close'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  //
-  // }
 
+  void handleTodoChange(Todo todo) {
+    // Toggle the completed status of the todo item
+    todo.completed = !todo.completed;
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       height: 86,
       decoration: BoxDecoration(

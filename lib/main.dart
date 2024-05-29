@@ -14,7 +14,7 @@ void main() => runApp(MaterialApp(
         '/front': (context) => const Frontscreen(),
         '/first': (context) => const Firstscreen(),
         '/setting': (context) => const Setting(),
-        '/opt': (context) => MenuAnchorExample(),
+        '/opt': (context) => const MenuAnchorExample(),
         '/bar': (context) => const bar(),
        '/drawer': (context) => const drawer(title: 'ok',),
       },
