@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'FirstScreen.dart';
 
 class bar extends StatefulWidget {
   const bar({Key? key}) : super(key: key);
@@ -65,7 +64,7 @@ class _barState extends State<bar> {
     );
   }
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   int _selectedTabIndex = 1;
 
   void _onTabTapped(int index) async {

@@ -11,22 +11,6 @@ class drawer extends StatefulWidget {
 
 class _drawerState extends State<drawer> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Index 0: Home',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -47,7 +31,7 @@ class _drawerState extends State<drawer> {
               decoration: BoxDecoration(
                 color: Colors.blue,
                 gradient: LinearGradient(
-                  colors: [Colors.deepPurpleAccent, Colors.blueAccent],
+                  colors: [Colors.deepPurpleAccent, Colors.cyanAccent],
                   begin: Alignment.centerRight,
                   end: Alignment(-1.0, -1.0),
                 ),
@@ -130,7 +114,7 @@ class _drawerState extends State<drawer> {
                   size: 30, color: Colors.blueAccent[100]),
               title: const Text('Premium'),
               onTap: () {
-                // Add your onTap logic for item 2 here
+                Navigator.pushNamed(context, '/premium');
               },
             ),
             ListTile(
@@ -138,7 +122,7 @@ class _drawerState extends State<drawer> {
                   Icon(Icons.star, size: 30, color: Colors.blueAccent[100]),
               title: const Text('Rate us'),
               onTap: () {
-                // Add your onTap logic for item 2 here
+
               },
             ),
             ListTile(

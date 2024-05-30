@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../component/DrawerCheck.dart';
 import 'barcheck.dart';
 import 'todo.dart';
-import 'option.dart';
+
 class Firstscreen extends StatefulWidget {
   const Firstscreen({Key? key}) : super(key: key);
 
@@ -16,6 +16,9 @@ class _FirstscreenState extends State<Firstscreen> {
   final TextEditingController _textFieldController = TextEditingController();
   final TextEditingController _textFieldController2 = TextEditingController();
   final TextEditingController _textFieldController3 = TextEditingController();
+  String _selectedPriority = 'Medium';
+  Todo? _editingTodo;
+  Color _selectedColor = Colors.red[100]!;
 
   //Handle Change function for todo list
   void handleTodoChange(Todo todo) {
@@ -32,28 +35,50 @@ class _FirstscreenState extends State<Firstscreen> {
   }
 
   //add to do item function
-  void _addTodoItem(String title, String name, String text, String color) {
-    setState(() {
-      todos.add(Todo(
+  void _addOrUpdateTodoItem(
+      Todo? todo, String title, String name, String text, String color) {
+    if (todo != null) {
+      // Update existing todo
+      setState(() {
+        todo.title = title;
+        todo.name = name;
+        todo.text = text;
+        todo.color = color;
+      });
+    } else {
+      // Add new todo
+      setState(() {
+        todos.add(Todo(
           title: title,
           name: name,
           completed: false,
           text: text,
-          color: color));
-    });
+          color: color,
+        ));
+      });
+    }
 
     _textFieldController.clear();
     _textFieldController2.clear();
     _textFieldController3.clear();
   }
 
+  // Display dialog for adding/editing a todo
+  Future<void> display({Todo? todo}) async {
+    if (todo != null) {
+      _textFieldController.text = todo.title;
+      _textFieldController2.text = todo.name;
+      _textFieldController3.text = todo.text;
+      _selectedPriority = todo.color;
+      _selectedColor = _getPriorityColor(todo.color);
+    } else {
+      _textFieldController.clear();
+      _textFieldController2.clear();
+      _textFieldController3.clear();
+      _selectedPriority = 'Medium';
+      _selectedColor = Colors.red[100]!;
+    }
 
-  //dialog box for more-horizontal in list
-
-
-//dialog box func along with the text field and add & cancel buttons
-  Future<void> display() async {
-    String selectedText = 'Medium';
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -61,15 +86,12 @@ class _FirstscreenState extends State<Firstscreen> {
           width: 360.0,
           height: 400.0,
           child: AlertDialog(
-            // backgroundColor: Colors.yellow,
             title: const Text('Create a new task'),
             content: Container(
               padding: const EdgeInsets.all(0),
               width: 600.0,
               height: 400.0,
-              // color: Colors.red,
               child: Column(
-                //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Row(
                     children: [
@@ -121,18 +143,19 @@ class _FirstscreenState extends State<Firstscreen> {
                   SizedBox(
                     height: 70,
                     width: 300,
-                    // margin: EdgeInsets.zero,
-                    // color: Colors.blue,
                     child: Row(
                       children: <Widget>[
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              selectedText = 'High';
+                              _selectedPriority = 'High';
+                              _selectedColor = Colors.blueAccent[100]!;
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent[100],
+                              backgroundColor: _selectedPriority == 'High'
+                                  ? Colors.blueAccent[100]
+                                  : Colors.grey,
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)))),
@@ -151,11 +174,14 @@ class _FirstscreenState extends State<Firstscreen> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              selectedText = 'Medium';
+                              _selectedPriority = 'Medium';
+                              _selectedColor = Colors.red[100]!;
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red[100],
+                              backgroundColor: _selectedPriority == 'Medium'
+                                  ? Colors.red[100]
+                                  : Colors.grey,
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)))),
@@ -171,11 +197,14 @@ class _FirstscreenState extends State<Firstscreen> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              selectedText = 'Low';
+                              _selectedPriority = 'Low';
+                              _selectedColor = Colors.orange[100]!;
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange[100],
+                              backgroundColor: _selectedPriority == 'Low'
+                                  ? Colors.orange[100]
+                                  : Colors.grey,
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)))),
@@ -215,20 +244,34 @@ class _FirstscreenState extends State<Firstscreen> {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  _addTodoItem(
+                  _addOrUpdateTodoItem(
+                    todo,
                     _textFieldController.text,
                     _textFieldController2.text,
                     _textFieldController3.text,
-                    selectedText,
+                    _selectedPriority,
                   );
                 },
-                child: const Text('Add'),
+                child: const Text('Save'),
               ),
             ],
           ),
         );
       },
     );
+  }
+
+  Color _getPriorityColor(String priority) {
+    switch (priority) {
+      case 'High':
+        return Colors.blueAccent[100]!;
+      case 'Medium':
+        return Colors.red[100]!;
+      case 'Low':
+        return Colors.orange[100]!;
+      default:
+        return Colors.red[100]!;
+    }
   }
 
   @override
@@ -391,7 +434,6 @@ class _FirstscreenState extends State<Firstscreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ListView(
-
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.all(8),
@@ -399,7 +441,8 @@ class _FirstscreenState extends State<Firstscreen> {
                     return TodoItem(
                         todo: todo,
                         onTodoChanged: handleTodoChange,
-                        removeTodo: _deleteTodo);
+                        removeTodo: _deleteTodo,
+                        onTodoEdit: () => display(todo: todo));
                   }).toList(),
                 ),
               ),
@@ -407,10 +450,11 @@ class _FirstscreenState extends State<Firstscreen> {
           ),
         ),
       ),
-      drawer: drawer(
+      drawer: const drawer(
         title: 'New',
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.deepPurpleAccent[80],
         onPressed: () => display(),
         tooltip: 'Add a Todo',
         child: const Icon(Icons.add),
@@ -420,18 +464,18 @@ class _FirstscreenState extends State<Firstscreen> {
   }
 }
 
-
-
 class TodoItem extends StatelessWidget {
-  TodoItem(
-      {required this.todo,
-      required this.onTodoChanged,
-      required this.removeTodo})
-      : super(key: ObjectKey(todo));
+  TodoItem({
+    required this.todo,
+    required this.onTodoChanged,
+    required this.removeTodo,
+    required this.onTodoEdit,
+  }) : super(key: Key(todo.title));
 
   final Todo todo;
   final void Function(Todo todo) onTodoChanged;
   final void Function(Todo todo) removeTodo;
+  final VoidCallback onTodoEdit;
 
   TextStyle? _getTextStyle(bool checked) {
     if (!checked) return null;
@@ -442,86 +486,96 @@ class TodoItem extends StatelessWidget {
     );
   }
 
-
-  void handleTodoChange(Todo todo) {
-    // Toggle the completed status of the todo item
-    todo.completed = !todo.completed;
-  }
-
   @override
   Widget build(BuildContext context) {
-
-    return Container(
-      height: 86,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black12),
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              children: <Widget>[
-                const SizedBox(height: 10),
-                Text(
-                  todo.title,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Column(
-                  children: [
-                    Text(
-                      todo.name,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: <Widget>[
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () {
-                    //Navigator.of(context).pop();
-                  },
-                  child: Text(
-                    todo.color,
+    return InkWell(
+      onTap: onTodoEdit,
+      child: Container(
+        height: 86,
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black12),
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                children: <Widget>[
+                  const SizedBox(height: 10),
+                  Text(
+                    todo.title,
                     style: const TextStyle(
                       color: Colors.black,
-                      fontSize: 12,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.more_horiz),
-                  onPressed: () => {
-                  showOptionsDialog(context)
-                  },
-                  // onPressed: () => removeTodo(todo),
-                  color: Colors.grey,
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  Column(
+                    children: [
+                      Text(
+                        todo.name,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: _getPriorityColor(todo.color),
+                      // Use the priority color
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onPressed: () {
+                      onTodoChanged(todo);
+                    },
+                    child: Text(
+                      todo.color,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      removeTodo(todo);
+                    },
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
+  }
+
+  Color _getPriorityColor(String priority) {
+    switch (priority) {
+      case 'High':
+        return Colors.blueAccent[100]!;
+      case 'Medium':
+        return Colors.red[100]!;
+      case 'Low':
+        return Colors.orange[100]!;
+      default:
+        return Colors.red[100]!;
+    }
   }
 }
