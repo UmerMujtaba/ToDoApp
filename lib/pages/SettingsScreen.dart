@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagramclone/pages/barcheck.dart';
+import 'package:instagramclone/component/BottomBar.dart';
 
 class Setting extends StatefulWidget {
   const Setting({Key? key}) : super(key: key);

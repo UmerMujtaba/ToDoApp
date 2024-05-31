@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:instagramclone/pages/FirstScreen.dart';
-import 'FrontScreen.dart';
-import 'option.dart';
-import 'premium.dart';
-import 'settings.dart';
-import '../component/DrawerCheck.dart';
-import '../component/loading.dart';
+import '../pages/FrontScreen.dart';
+import '../pages/PremiumScreen.dart';
+import '../pages/SettingsScreen.dart';
+import 'DrawerCheck.dart';
+
 
 class bar extends StatefulWidget {
   const bar({Key? key}) : super(key: key);
@@ -90,14 +89,14 @@ class _barState extends State<bar> {
 
   int currentTab = 0;
   final List<Widget> screens = [
-    Firstscreen(),
-    Frontscreen(),
-    Premium(),
-    Setting(),
-    drawer(title: 'ok'),
+    const Firstscreen(),
+    const Frontscreen(),
+    const Premium(),
+    const Setting(),
+    const drawer(title: 'ok'),
   ];
 
-  Widget currentscreen = Firstscreen();
+  Widget currentscreen = const Firstscreen();
   final PageStorageBucket bucket = PageStorageBucket();
 
   @override
