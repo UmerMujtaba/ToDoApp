@@ -6,7 +6,7 @@ import 'pages/SettingsScreen.dart';
 import 'component/BottomBar.dart';
 import 'component/DrawerCheck.dart';
 import 'pages/PremiumScreen.dart';
-
+import 'component/drop.dart';
 void main() => runApp(MaterialApp(
       initialRoute: '/front',
       routes: {
@@ -17,6 +17,6 @@ void main() => runApp(MaterialApp(
         '/bar': (context) => const bar(),
         '/drawer': (context) => const drawer(title: 'ok',),
         '/premium': (context) => const Premium(),
-
+        '/d': (context)=>const DropButton(),
       },
     ));
