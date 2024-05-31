@@ -33,7 +33,7 @@ class Frontscreen extends StatelessWidget {
                             Navigator.pushReplacementNamed(context, '/first');
                           });
                         },
-                        child: Text(
+                        child: const Text(
                           'Skip',
                           style: TextStyle(
                             color: Colors.white,
