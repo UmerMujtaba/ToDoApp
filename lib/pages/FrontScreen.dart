@@ -29,13 +29,13 @@ class Frontscreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.pushNamed(context, '/');
                           // Simulate a delay for loading
-                          Future.delayed(Duration(seconds: 1), () {
+                          Future.delayed(const Duration(seconds: 1), () {
                             Navigator.pushReplacementNamed(context, '/first');
                           });
                         },
                         child: const Text(
                           'Skip',
-                          style: TextStyle(
+                          style:  TextStyle(
                             color: Colors.white,
                           ),
                         ),
@@ -43,14 +43,14 @@ class Frontscreen extends StatelessWidget {
                     )
                   ],
                 ),
-                SizedBox(height: 80),
-                Image(
+                const SizedBox(height: 80),
+                const Image(
                   image: AssetImage('assets/two.png'),
                   height: 350,
                   //alignment: Alignment.center,
                 ),
-                SizedBox(height: 30),
-                Text(
+                const SizedBox(height: 30),
+                const Text(
                   'Manage Your Task',
                   style: TextStyle(
                       color: Colors.black,
@@ -58,7 +58,7 @@ class Frontscreen extends StatelessWidget {
                       fontSize: 28,
                       fontFamily: 'Freeman'),
                 ),
-                Text(
+                const Text(
                   'Manage and organize all your to-dos and tasks easily',
                   textAlign: TextAlign.center,
                   style: TextStyle(
@@ -68,7 +68,7 @@ class Frontscreen extends StatelessWidget {
                 ),
               ],
             ),
-            Opacity(
+            const Opacity(
               opacity: 0.5,
               child: Image(
                 image: AssetImage('assets/5.png'),
