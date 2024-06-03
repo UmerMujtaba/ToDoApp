@@ -1,100 +1,52 @@
-import 'package:sqflite/sqflite.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
-
-// final String tableTodo = 'todo';
-// final String columnId = '_id';
-// final String columnTitle = 'title';
-// final String columnDone = 'done';
-//
-
 
 class Todo {
   int? id;
   String title;
-  String name;
+  String description;
   bool completed;
   String text;
   String color;
-  // bool done;
+
   Todo({
     this.id,
     required this.title,
-    required this.name,
-    required this.completed,
-    required this.text,
-    required this.color,
-    // required this.done
-  });
-
-  // Map<String, Object?> toMap() {
-  //   var map = <String, Object?>{
-  //     columnTitle: title,
-  //     columnDone: done == true ? 1 : 0
-  //   };
-  //   if (id != null) {
-  //     map[columnId] = id;
-  //   }
-  //   return map;
-  // }
-  //
-  // Todo.fromMap(Map<String, Object?> map) {
-  //   id = map[columnId] as int?;
-  //   done = map[columnDone] == 1;
-  // }
-
-}
-
-class TodoFields {
-  static const String tableName = 'todos';
-
-  static const String id = 'id';
-  static const String title = 'title';
-  static const String name = 'name';
-  static const String completed = 'completed';
-  static const String text = 'text';
-  static const String color = 'color';
-
-  static const List<String> values = [
-    id,
-    name,
-    title,
-    text,
-    completed,
-    color,
-  ];
-}
-
-class TodoModel {
-  final int? id;
-  final String title;
-  final String name;
-  final bool completed;
-  final String text;
-  final String color;
-
-  TodoModel({
-    this.id,
-    required this.title,
-    required this.name,
+    required this.description,
     required this.completed,
     required this.text,
     required this.color,
   });
 
-  TodoModel copyWith({
-    int? id,
-    String? title,
-    String? name,
-    bool? completed,
-    String? text,
-    String? color,
-  }) =>
-      TodoModel(
-        id: id ?? this.id,
-        title: title ?? this.title,
-        name: name ?? this.name,
-        completed: completed ?? this.completed,
-        text: text ?? this.text,
-        color: color ?? this.color,
-      );
-}
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic>{
+      columnTitle: this.title,
+      columndescription: description,
+      columnCompleted: completed ? 1 : 0,
+      columnText: text,
+      columnColor: color, // Store color as an integer
+    };
+    if (id != null) {
+      map[columnId] = id;
+    }
+    return map;
+  }
+
+  Todo.fromMap(Map<String, dynamic> map)
+      : id = map[columnId] as int?,
+        title = map[columnTitle] as String,
+        description = map[columndescription] as String,
+        completed = (map[columnCompleted] as int) == 1,
+        text = map[columnText] as String,
+        color = map[columnColor] as String // Convert integer to Color
+;}
+
+// Constants for column descriptions (replace with your actual column descriptions)
+const String columnId = 'id';
+const String columnTitle = 'title';
+const String columndescription = 'description';
+const String columnCompleted = 'completed';
+const String columnText = 'text';
+const String columnColor = 'color'; // Change to String for column name
+
+// Define your color constants if needed, but in this case, it's not necessary.
