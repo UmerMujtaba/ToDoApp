@@ -78,8 +78,8 @@ class Premium extends StatelessWidget {
               const SizedBox(height: 10),
 
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 60),
-                child: Column(
+                padding: const EdgeInsets.symmetric(horizontal: 60),
+                child: const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[

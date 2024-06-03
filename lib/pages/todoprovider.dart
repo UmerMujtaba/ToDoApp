@@ -1,7 +1,7 @@
 // todoprovider.dart
 import 'package:sqflite/sqflite.dart';
 import 'todo.dart';
-import 'package:path/path.dart' as path;
+
 class TodoProvider {
   late Database db;
   bool _isOpen = false; // Add a boolean flag to track if the database is opened

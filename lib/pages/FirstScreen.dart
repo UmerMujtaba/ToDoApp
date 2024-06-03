@@ -4,7 +4,7 @@ import '../component/DrawerCheck.dart';
 import '../component/BottomBar.dart';
 import 'todo.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:sqflite/sqflite.dart';
+
 import 'todoprovider.dart';
 
 class Firstscreen extends StatefulWidget {
@@ -23,6 +23,7 @@ class _FirstscreenState extends State<Firstscreen> {
   void initState() {
     super.initState();
     _todoProvider = TodoProvider();
+    _selectedPriority='';
     _todoProvider.open('sample.db').then((_) {
       print('Database opened');
       // Perform database operations here, like loading todos
@@ -64,11 +65,12 @@ class _FirstscreenState extends State<Firstscreen> {
   final TextEditingController _textFieldController = TextEditingController();
   final TextEditingController _textFieldController2 = TextEditingController();
   final TextEditingController _textFieldController3 = TextEditingController();
-  String _selectedPriority = 'Medium';
+  String _selectedPriority = '';
   Todo? _editingTodo;
   Color _selectedColor = Colors.red[300]!;
   File? galleryFile;
   final picker = ImagePicker();
+  bool isPressed = false;
 
   //Handle Change function for todo list
   void handleTodoChange(Todo todo) {
@@ -114,18 +116,19 @@ class _FirstscreenState extends State<Firstscreen> {
   }
 
   // Display dialog for adding/editing a todo
-  Future<void> display({Todo? todo}) async {
+  void display({Todo? todo}) async {
     if (todo != null) {
       _textFieldController.text = todo.title;
       _textFieldController2.text = todo.description;
       _textFieldController3.text = todo.text;
       _selectedPriority = todo.color;
       _selectedColor = _getPriorityColor(todo.color);
-    } else {
+    }
+    else {
       _textFieldController.clear();
       _textFieldController2.clear();
       _textFieldController3.clear();
-      _selectedPriority = 'Medium';
+      _selectedPriority = '';
       _selectedColor = Colors.red[300]!;
     }
 
@@ -204,13 +207,15 @@ class _FirstscreenState extends State<Firstscreen> {
                           onPressed: () {
                             setState(() {
                               _selectedPriority = 'High';
-                              _selectedColor = Colors.blue[400]!;
+                              print(_selectedPriority);
+
                               _textFieldController3.text = _selectedPriority;
+                              // _selectedColor = Colors.green!;
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue[400],
-                              elevation: 5,
+                              backgroundColor: _selectedPriority == 'High' ? Colors.blue[400] : Colors.grey,
+                              elevation: _selectedPriority == 'High' ? 10 : 2,
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)))),
@@ -230,13 +235,15 @@ class _FirstscreenState extends State<Firstscreen> {
                           onPressed: () {
                             setState(() {
                               _selectedPriority = 'Medium';
-                              _selectedColor = Colors.orange[300]!;
+
                               _textFieldController3.text = _selectedPriority;
+                              // _selectedColor = Colors.blue[400]!;
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red[300],
-                              elevation: 5,
+                              backgroundColor: _selectedPriority == 'Medium' ? Colors.orange : Colors.grey,
+                              // elevation: _selectedPriority == 'Medium' ? 10 : 2,
+                              // padding: _selectedPriority == 'Medium' ? EdgeInsets.symmetric(horizontal: 20, vertical: 10) : EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)))),
@@ -253,13 +260,16 @@ class _FirstscreenState extends State<Firstscreen> {
                           onPressed: () {
                             setState(() {
                               _selectedPriority = 'Low';
-                              _selectedColor = Colors.orange[300]!;
+                              print(_selectedPriority);
+
                               _textFieldController3.text = _selectedPriority;
+                              // print('$_selectedColor');
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange[300],
-                              elevation: 5,
+                              backgroundColor: _selectedPriority == 'Low' ? Colors.yellow : Colors.grey,
+                              // elevation: _selectedPriority == 'Low' ? 10 : 2,
+                              // padding: _selectedPriority == 'Low' ? EdgeInsets.all(10) : EdgeInsets.all(2),
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)))),
@@ -328,36 +338,27 @@ class _FirstscreenState extends State<Firstscreen> {
                       _textFieldController2.text,
                       _textFieldController3.text,
                       _selectedPriority,
-
                     );
-                    // _todoProvider.open('todo.db').then((_) {
-                    //   print('Database opened');
-                    // }).catchError((e) {
-                    //   print('Error opening database: $e');
-                    // });
 
                     Todo newTodo = Todo(
                       title: _textFieldController.text,
                       description: _textFieldController2.text,
                       completed: false,
                       text: _textFieldController3.text,
-                      color: '',
+                      color: _selectedPriority,
                     );
                     print('*****************');
                     print(_textFieldController.text);
                     print('*****************');
                     print(newTodo.color);
                     print('*****************');
-                    // Insert or update the Todo in the database
+
                     if (todo == null) {
-                      // If it's a new todo, insert it into the database
                       await _todoProvider.insert(newTodo);
                     } else {
-                      // If it's an existing todo, update it in the database
                       await _todoProvider.update(newTodo);
                     }
 
-                    // Reload todos from the database
                     await _loadTodos();
                   },
                   child: const Padding(
