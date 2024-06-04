@@ -1,4 +1,3 @@
-
 class Todo {
   int? id;
   String title;
@@ -30,14 +29,19 @@ class Todo {
     return map;
   }
 
-  Todo.fromMap(Map<String, dynamic> map)
-      : id = map[columnId] as int?,
-        title = map[columnTitle] as String,
-        description = map[columndescription] as String,
-        completed = (map[columnCompleted] as int) == 1,
-        text = map[columnText] as String,
-        color = map[columnColor] as String // Convert integer to Color
-;}
+  factory Todo.fromMap(Map<String, dynamic> map) {
+    return Todo(
+      id: map['id'] as int?,
+      // Ensure 'id' is cast to int?
+      title: map['title'] as String,
+      description: map['description'] as String,
+      completed: map['completed'] == 1,
+      // Convert to bool
+      text: map['text'] as String,
+      color: map['color'] as String,
+    );
+  }
+}
 
 // Constants for column descriptions (replace with your actual column descriptions)
 const String columnId = 'id';

@@ -22,11 +22,11 @@ class _FirstscreenState extends State<Firstscreen> {
   @override
   void initState() {
     super.initState();
-    _todoProvider = TodoProvider();
-    _selectedPriority='';
+    _todoProvider =
+        widget.todoProvider; // Use the instance passed through the constructor
+    _selectedPriority = '';
     _todoProvider.open('sample.db').then((_) {
       print('Database opened');
-      // Perform database operations here, like loading todos
       _loadTodos();
     }).catchError((e) {
       print('Error opening database: $e');
@@ -44,17 +44,27 @@ class _FirstscreenState extends State<Firstscreen> {
   }
 
   Future<void> _loadTodos() async {
-    if (widget.todoProvider != null) {
-      List<Todo> loadedTodos = await widget.todoProvider.getAllTodos();
+    try {
+      List<Todo> loadedTodos = await _todoProvider.getAllTodos();
       setState(() {
+        todos.clear();
         todos.addAll(loadedTodos);
       });
-    } else {
-      print(
-          'TodoProvider is null'); // Handle the case where TodoProvider is null
+    } catch (e) {
+      print('Error loading todos: $e');
     }
   }
 
+  Future<void> _deleteTodoItem(Todo todo) async {
+    try {
+      await _todoProvider.delete(todo.id!); // Ensure id is not null
+      setState(() {
+        todos.removeWhere((element) => element.id == todo.id);
+      });
+    } catch (e) {
+      print('Error deleting todo item: $e');
+    }
+  }
   @override
   void dispose() {
     _todoProvider.close();
@@ -70,7 +80,6 @@ class _FirstscreenState extends State<Firstscreen> {
   Color _selectedColor = Colors.red[300]!;
   File? galleryFile;
   final picker = ImagePicker();
-  bool isPressed = false;
 
   //Handle Change function for todo list
   void handleTodoChange(Todo todo) {
@@ -80,11 +89,11 @@ class _FirstscreenState extends State<Firstscreen> {
   }
 
   //Remove To Do function to delete a to do
-  void _deleteTodo(Todo todo) {
-    setState(() {
-      todos.removeWhere((element) => element.title == todo.title);
-    });
-  }
+  // void _deleteTodo(Todo todo) {
+  //   setState(() {
+  //     todos.removeWhere((element) => element.title == todo.title);
+  //   });
+  // }
 
   //add to do item function
   void _addOrUpdateTodoItem(
@@ -116,15 +125,14 @@ class _FirstscreenState extends State<Firstscreen> {
   }
 
   // Display dialog for adding/editing a todo
-  void display({Todo? todo}) async {
+  Future<void> display({Todo? todo}) async {
     if (todo != null) {
       _textFieldController.text = todo.title;
       _textFieldController2.text = todo.description;
       _textFieldController3.text = todo.text;
       _selectedPriority = todo.color;
       _selectedColor = _getPriorityColor(todo.color);
-    }
-    else {
+    } else {
       _textFieldController.clear();
       _textFieldController2.clear();
       _textFieldController3.clear();
@@ -140,7 +148,7 @@ class _FirstscreenState extends State<Firstscreen> {
           height: 400.0,
           child: AlertDialog(
             title: const Text(
-              'Create a new task',
+              'Create new task',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -204,21 +212,26 @@ class _FirstscreenState extends State<Firstscreen> {
                     child: Row(
                       children: <Widget>[
                         ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: _selectedPriority == 'High'
+                                  ? Colors.red[400]
+                                  : Colors.grey,
+                              elevation: _selectedPriority == 'High' ? 20 : 5,
+                              minimumSize: _selectedPriority == 'High'
+                                  ? const Size.square(45)
+                                  : const Size.square(35),
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)))),
                           onPressed: () {
                             setState(() {
                               _selectedPriority = 'High';
                               print(_selectedPriority);
-
                               _textFieldController3.text = _selectedPriority;
+
                               // _selectedColor = Colors.green!;
                             });
                           },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: _selectedPriority == 'High' ? Colors.blue[400] : Colors.grey,
-                              elevation: _selectedPriority == 'High' ? 10 : 2,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)))),
                           child: const SizedBox(
                             width: 20,
                             child: Text(
@@ -235,23 +248,29 @@ class _FirstscreenState extends State<Firstscreen> {
                           onPressed: () {
                             setState(() {
                               _selectedPriority = 'Medium';
-
+                              print(_selectedPriority);
                               _textFieldController3.text = _selectedPriority;
-                              // _selectedColor = Colors.blue[400]!;
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: _selectedPriority == 'Medium' ? Colors.orange : Colors.grey,
-                              // elevation: _selectedPriority == 'Medium' ? 10 : 2,
-                              // padding: _selectedPriority == 'Medium' ? EdgeInsets.symmetric(horizontal: 20, vertical: 10) : EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                              backgroundColor: _selectedPriority == 'Medium'
+                                  ? Colors.orange[300]
+                                  : Colors.grey,
+                              elevation: _selectedPriority == 'Medium' ? 20 : 5,
+                              minimumSize: _selectedPriority == 'Medium'
+                                  ? const Size.square(45)
+                                  : const Size.square(35),
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)))),
-                          child: const Text(
-                            'Medium',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
+                          child: const SizedBox(
+                            width: 35,
+                            child: Text(
+                              'Medium',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                              ),
                             ),
                           ),
                         ),
@@ -261,20 +280,22 @@ class _FirstscreenState extends State<Firstscreen> {
                             setState(() {
                               _selectedPriority = 'Low';
                               print(_selectedPriority);
-
                               _textFieldController3.text = _selectedPriority;
-                              // print('$_selectedColor');
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: _selectedPriority == 'Low' ? Colors.yellow : Colors.grey,
-                              // elevation: _selectedPriority == 'Low' ? 10 : 2,
-                              // padding: _selectedPriority == 'Low' ? EdgeInsets.all(10) : EdgeInsets.all(2),
+                              backgroundColor: _selectedPriority == 'Low'
+                                  ? Colors.blue[300]
+                                  : Colors.grey,
+                              elevation: _selectedPriority == 'Low' ? 20 : 5,
+                              minimumSize: _selectedPriority == 'Low'
+                                  ? const Size.square(45)
+                                  : Size.square(35),
                               shape: const RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(5)))),
                           child: const SizedBox(
-                            width: 22,
+                            width: 20,
                             child: Text(
                               'Low',
                               style: TextStyle(
@@ -364,7 +385,7 @@ class _FirstscreenState extends State<Firstscreen> {
                   child: const Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Text(
-                      'Create a Task',
+                      'Create Task',
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                   ),
@@ -380,13 +401,13 @@ class _FirstscreenState extends State<Firstscreen> {
   Color _getPriorityColor(String priority) {
     switch (priority) {
       case 'High':
-        return Colors.blue[400]!;
+        return Colors.red[400]!;
       case 'Medium':
-        return Colors.red[300]!;
-      case 'Low':
         return Colors.orange[300]!;
+      case 'Low':
+        return Colors.blue[300]!;
       default:
-        return Colors.red[300]!;
+        return Colors.grey;
     }
   }
 
@@ -557,7 +578,7 @@ class _FirstscreenState extends State<Firstscreen> {
                     return TodoItem(
                         todo: todo,
                         onTodoChanged: handleTodoChange,
-                        removeTodo: _deleteTodo,
+                        removeTodo: _deleteTodoItem,
                         onTodoEdit: () => display(todo: todo));
                   }).toList(),
                 ),
@@ -639,7 +660,7 @@ class TodoItem extends StatelessWidget {
 
   final Todo todo;
   final void Function(Todo todo) onTodoChanged;
-  final void Function(Todo todo) removeTodo;
+  final  void Function(Todo todo) removeTodo;
   final VoidCallback onTodoEdit;
 
   TextStyle? _getTextStyle(bool checked) {
@@ -654,95 +675,99 @@ class TodoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTodoEdit,
-      child: Container(
-        height: 86,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.black12),
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                children: <Widget>[
-                  const SizedBox(height: 10),
-                  Text(
-                    todo.title,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+        onTap: onTodoEdit,
+        child: ListView(
+            shrinkWrap: true,
+            // physics: const AlwaysScrollableScrollPhysics(),
+            children: <Widget>[
+              Container(
+                  height: 86,
+                  decoration: BoxDecoration(
+                    // color: Colors.red,
+                    border: Border.all(color: Colors.black12),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
                   ),
-                  const SizedBox(height: 10),
-                  Column(
-                    children: [
-                      Text(
-                        todo.description,
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 14,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            children: <Widget>[
+                              const SizedBox(height: 10),
+                              Text(
+                                todo.title,
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Column(
+                                children: [
+                                  Text(
+                                    todo.description,
+                                    style: const TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _getPriorityColor(todo.color),
-                      elevation: 5,
-                      // Use the priority color
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {
-                      onTodoChanged(todo);
-                    },
-                    child: Text(
-                      todo.color,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      removeTodo(todo);
-                    },
-                    color: Colors.grey,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: <Widget>[
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      _getPriorityColor(todo.color),
+                                  elevation: 5,
+                                  // Use the priority color
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  onTodoChanged(todo);
+                                },
+                                child: Text(
+                                  todo.color,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete),
+                                onPressed: () {
+                                  removeTodo(todo);
+                                },
+                                color: Colors.grey,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]))
+            ]));
   }
 
   Color _getPriorityColor(String priority) {
     Color? color;
     switch (priority) {
       case 'High':
-        color = Colors.blue[400];
+        color = Colors.red[400];
         break;
       case 'Medium':
-        color = Colors.red[300];
+        color = Colors.orange[300];
         break;
       case 'Low':
-        color = Colors.orange[300];
+        color = Colors.blue[300];
         break;
     }
     return color ?? Colors.grey; // Use Colors.grey as a fallback color

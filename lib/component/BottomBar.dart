@@ -80,7 +80,7 @@ class _barState extends State<bar> {
       Navigator.pushNamed(context, '/drawer');
     }
     if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/first');
+      Navigator.restorablePushReplacementNamed(context, '/first');
     }
     if (index == 2) {
       await calendar();

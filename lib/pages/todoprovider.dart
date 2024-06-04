@@ -8,7 +8,6 @@ class TodoProvider {
 
   bool get isOpen => _isOpen;
 
-
   Future open(String path) async {
     try {
       db = await openDatabase(path, version: 1, onCreate: (db, version) async {
@@ -45,16 +44,14 @@ class TodoProvider {
     }
   }
 
-
-
   Future<Todo?> getTodo(int id) async {
     List<Map> maps = await db.query(tableTodo,
         columns: [
           columnId,
           columnTitle,
           columnDescription,
-          columnText,
           columnCompleted,
+          columnText,
           columnColor
         ],
         where: '$columnId = ?',
@@ -66,12 +63,12 @@ class TodoProvider {
   }
 
   Future<List<Todo>> getAllTodos() async {
+    print('IN GET ALL TODOS');
     List<Map<String, dynamic>> maps = await db.query(tableTodo);
     return List.generate(maps.length, (i) {
       return Todo.fromMap(maps[i]);
     });
   }
-
 
   Future<int> delete(int id) async {
     return await db.delete(tableTodo, where: '$columnId = ?', whereArgs: [id]);
@@ -90,7 +87,6 @@ const String tableTodo = 'todo';
 const String columnId = 'id';
 const String columnTitle = 'title';
 const String columnDescription = 'description';
+const String columnCompleted = 'completed';
 const String columnText = 'text';
-const String columnCompleted='completed';
-const String columnColor='color';
-
+const String columnColor = 'color';
