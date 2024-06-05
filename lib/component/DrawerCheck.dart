@@ -39,7 +39,7 @@ class _drawerState extends State<drawer> {
                 ),
                 child: null,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               ListTile(
                 //leading: Icon(Icons.category),
                 title: const Text(
@@ -51,7 +51,7 @@ class _drawerState extends State<drawer> {
                   ),
                 ),
                 onTap: () {
-                  // Add your onTap logic here
+                  // Navigator.maybePop(context, '/d');
                 },
                 subtitle: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,7 +87,8 @@ class _drawerState extends State<drawer> {
                     const SizedBox(height: 20),
                     Row(
                       children: [
-                        Icon(Icons.cake, size: 30, color: Colors.blueAccent[100]),
+                        Icon(Icons.cake,
+                            size: 30, color: Colors.blueAccent[100]),
                         const Padding(
                           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                           child: Text(
@@ -100,11 +101,18 @@ class _drawerState extends State<drawer> {
                     const SizedBox(height: 20),
                   ],
                 ),
+                // trailing: IconButton(
+                //     icon: const Icon(
+                //       Icons.arrow_drop_down_sharp,
+                //       size: 40,
+                //       color: Colors.deepPurpleAccent,
+                //     ),
+                //     onPressed: () {})
               ),
               const Divider(height: 2),
               ListTile(
-                leading:
-                    Icon(Icons.reorder, size: 30, color: Colors.blueAccent[100]),
+                leading: Icon(Icons.reorder,
+                    size: 30, color: Colors.blueAccent[100]),
                 title: const Text('Reorder Tasks'),
                 onTap: () {
                   // Add your onTap logic for item 1 here
@@ -122,13 +130,11 @@ class _drawerState extends State<drawer> {
                 leading:
                     Icon(Icons.star, size: 30, color: Colors.blueAccent[100]),
                 title: const Text('Rate us'),
-                onTap: () {
-      
-                },
+                onTap: () {},
               ),
               ListTile(
-                leading:
-                    Icon(Icons.settings, size: 30, color: Colors.blueAccent[100]),
+                leading: Icon(Icons.settings,
+                    size: 30, color: Colors.blueAccent[100]),
                 title: const Text('Setting'),
                 onTap: () {
                   Navigator.pushNamed(context, '/setting');

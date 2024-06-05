@@ -90,7 +90,7 @@ class _SettingState extends State<Setting> {
             ),
           ),
         ),
-        bottomNavigationBar: bar(),
+        bottomNavigationBar: const bar(),
       ),
     );
   }

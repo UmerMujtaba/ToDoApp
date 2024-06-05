@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:instagramclone/pages/FirstScreen.dart';
-import '../pages/FrontScreen.dart';
-import '../pages/PremiumScreen.dart';
-import '../pages/SettingsScreen.dart';
+import '../screens/FirstScreen.dart';
+import '../screens/FrontScreen.dart';
+import '../screens/PremiumScreen.dart';
+import '../screens/SettingsScreen.dart';
 import 'DrawerCheck.dart';
-
+import '../model/todoprovider.dart';
 
 class bar extends StatefulWidget {
+
   const bar({Key? key}) : super(key: key);
 
   @override
   State<bar> createState() => _barState();
+
 }
 
 class _barState extends State<bar> {
+  TodoProvider todoProvider = TodoProvider();
   //fun to show calendar in a dialog box
   Future<void> calendar() async {
     DateTime firstDate = DateTime(2010, 10, 16);
@@ -77,7 +80,7 @@ class _barState extends State<bar> {
       Navigator.pushNamed(context, '/drawer');
     }
     if (index == 1) {
-      Navigator.pushReplacementNamed(context, '/first');
+      Navigator.restorablePushReplacementNamed(context, '/first');
     }
     if (index == 2) {
       await calendar();
@@ -89,15 +92,16 @@ class _barState extends State<bar> {
 
   int currentTab = 0;
   final List<Widget> screens = [
-    const Firstscreen(),
+    Firstscreen(todoProvider: TodoProvider()),
     const Frontscreen(),
     const Premium(),
     const Setting(),
     const drawer(title: 'ok'),
   ];
 
-  Widget currentscreen = const Firstscreen();
-  final PageStorageBucket bucket = PageStorageBucket();
+  Widget currentscreen = Firstscreen(todoProvider: TodoProvider()); // Pass _todoProvider to FirstScreen
+
+  // final storageBucket bucket = storageBucket();
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +143,7 @@ class _barState extends State<bar> {
   }
 }
 
-// PageStorage(
+// storage(
 // child: currentscreen,
 // bucket: bucket,
 // ),
