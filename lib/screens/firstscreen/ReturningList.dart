@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '/model/todo.dart';
-import '/model/todoitem.dart';
-import '/model/todoprovider.dart';
-import 'DisplayDialog.dart';
+import '/model/TodoClass.dart';
+import '/model/TodoItem.dart';
+import '/model/TodoProvider.dart';
+import 'ShowDialog.dart';
 
 class ReturnList extends StatefulWidget {
   final TodoProvider todoProvider;

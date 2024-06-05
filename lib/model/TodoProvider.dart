@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'todo.dart';
-import 'package:sqflite/sqflite.dart';
+import 'TodoClass.dart';
 import 'package:path/path.dart';
 
 class TodoProvider {

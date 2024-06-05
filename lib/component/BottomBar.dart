@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import '../screens/FirstScreen.dart';
-import '../screens/FrontScreen.dart';
+import '../screens/Startscreen.dart';
 import '../screens/PremiumScreen.dart';
 import '../screens/SettingsScreen.dart';
 import 'DrawerCheck.dart';
-import '../model/todoprovider.dart';
+import '../model/TodoProvider.dart';
 
 class bar extends StatefulWidget {
 
