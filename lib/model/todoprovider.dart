@@ -31,6 +31,7 @@ class TodoProvider {
   }
 
   Future<Todo> insert(Todo todo) async {
+    print('i am in insert');
     try {
       todo.id = await db.insert(
         tableTodo,

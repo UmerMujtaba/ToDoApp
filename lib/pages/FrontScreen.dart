@@ -5,6 +5,8 @@ class Frontscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -27,6 +29,7 @@ class Frontscreen extends StatelessWidget {
                                   BorderRadius.all(Radius.circular(10)),
                             )),
                         onPressed: () {
+
                           Navigator.pushNamed(context, '/');
                           // Simulate a delay for loading
                           Future.delayed(const Duration(seconds: 1), () {

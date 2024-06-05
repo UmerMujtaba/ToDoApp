@@ -7,7 +7,7 @@ import 'component/BottomBar.dart';
 import 'component/DrawerCheck.dart';
 import 'pages/PremiumScreen.dart';
 import 'component/drop.dart';
-import 'pages/todoprovider.dart';
+import 'model/todoprovider.dart';
 
 void main() => runApp(MyApp());
 

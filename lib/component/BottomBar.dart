@@ -4,7 +4,7 @@ import '../pages/FrontScreen.dart';
 import '../pages/PremiumScreen.dart';
 import '../pages/SettingsScreen.dart';
 import 'DrawerCheck.dart';
-import '../pages/todoprovider.dart';
+import '../model/todoprovider.dart';
 
 class bar extends StatefulWidget {
 

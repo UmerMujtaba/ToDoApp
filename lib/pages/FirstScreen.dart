@@ -2,15 +2,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import '../component/DrawerCheck.dart';
 import '../component/BottomBar.dart';
-import 'todo.dart';
+import '../model/todo.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'todoprovider.dart';
+import '../model/todoitem.dart';
+import '../model/todoprovider.dart';
+import 'DisplayDialog.dart';
 
 class Firstscreen extends StatefulWidget {
   final TodoProvider todoProvider;
 
-  const Firstscreen({Key? key, required this.todoProvider}) : super(key: key);
+  const Firstscreen({super.key, required this.todoProvider});
 
   @override
   State<Firstscreen> createState() => _FirstscreenState();
@@ -19,18 +21,15 @@ class Firstscreen extends StatefulWidget {
 class _FirstscreenState extends State<Firstscreen> {
   late TodoProvider _todoProvider;
 
+  final List<Todo> todos = <Todo>[];
+  Todo? _editingTodo;
+  Color _selectedColor = Colors.grey;
+  File? galleryFile;
+  final picker = ImagePicker();
+
   @override
   void initState() {
     super.initState();
-    _todoProvider =
-        widget.todoProvider; // Use the instance passed through the constructor
-    _selectedPriority = '';
-    _todoProvider.open('sample.db').then((_) {
-      print('Database opened');
-      _loadTodos();
-    }).catchError((e) {
-      print('Error opening database: $e');
-    });
   }
 
   Future<void> openDatabase() async {
@@ -43,17 +42,6 @@ class _FirstscreenState extends State<Firstscreen> {
     }
   }
 
-  Future<void> _loadTodos() async {
-    try {
-      List<Todo> loadedTodos = await _todoProvider.getAllTodos();
-      setState(() {
-        todos.clear();
-        todos.addAll(loadedTodos);
-      });
-    } catch (e) {
-      print('Error loading todos: $e');
-    }
-  }
 
   Future<void> _deleteTodoItem(Todo todo) async {
     try {
@@ -65,21 +53,13 @@ class _FirstscreenState extends State<Firstscreen> {
       print('Error deleting todo item: $e');
     }
   }
+
   @override
   void dispose() {
     _todoProvider.close();
     super.dispose();
   }
 
-  final List<Todo> todos = <Todo>[];
-  final TextEditingController _textFieldController = TextEditingController();
-  final TextEditingController _textFieldController2 = TextEditingController();
-  final TextEditingController _textFieldController3 = TextEditingController();
-  String _selectedPriority = '';
-  Todo? _editingTodo;
-  Color _selectedColor = Colors.red[300]!;
-  File? galleryFile;
-  final picker = ImagePicker();
 
   //Handle Change function for todo list
   void handleTodoChange(Todo todo) {
@@ -88,328 +68,8 @@ class _FirstscreenState extends State<Firstscreen> {
     });
   }
 
-  //Remove To Do function to delete a to do
-  // void _deleteTodo(Todo todo) {
-  //   setState(() {
-  //     todos.removeWhere((element) => element.title == todo.title);
-  //   });
-  // }
-
   //add to do item function
-  void _addOrUpdateTodoItem(
-      Todo? todo, String title, String description, String text, String color) {
-    if (todo != null) {
-      // Update existing todo
-      setState(() {
-        todo.title = title;
-        todo.description = description;
-        todo.text = text;
-        todo.color = color;
-      });
-    } else {
-      // Add new todo
-      setState(() {
-        todos.add(Todo(
-          title: title,
-          description: description,
-          completed: false,
-          text: text,
-          color: color,
-        ));
-      });
-    }
 
-    // _textFieldController.clear();
-    // _textFieldController2.clear();
-    // _textFieldController3.clear();
-  }
-
-  // Display dialog for adding/editing a todo
-  Future<void> display({Todo? todo}) async {
-    if (todo != null) {
-      _textFieldController.text = todo.title;
-      _textFieldController2.text = todo.description;
-      _textFieldController3.text = todo.text;
-      _selectedPriority = todo.color;
-      _selectedColor = _getPriorityColor(todo.color);
-    } else {
-      _textFieldController.clear();
-      _textFieldController2.clear();
-      _textFieldController3.clear();
-      _selectedPriority = '';
-      _selectedColor = Colors.red[300]!;
-    }
-
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SizedBox(
-          width: 360.0,
-          height: 400.0,
-          child: AlertDialog(
-            title: const Text(
-              'Create new task',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            content: Container(
-              padding: const EdgeInsets.all(0),
-              width: 600.0,
-              height: 400.0,
-              child: Column(
-                children: [
-                  const Row(
-                    children: [
-                      Text(
-                        'Title',
-                        style: TextStyle(color: Colors.black, fontSize: 14),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 35,
-                    width: 180,
-                    child: TextField(
-                      controller: _textFieldController,
-                      decoration: const InputDecoration(
-                          hintText: 'Enter Title'), //act as a placeholder
-                      autofocus: true,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  const Row(
-                    children: [
-                      Text(
-                        'description',
-                        style: TextStyle(color: Colors.black, fontSize: 14),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 35,
-                    width: 180,
-                    child: TextField(
-                      controller: _textFieldController2,
-                      decoration: const InputDecoration(
-                          hintText: 'Enter description'), //act as a placeholder
-                      autofocus: true,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Row(
-                    children: [
-                      Text(
-                        'Priorities',
-                        style: TextStyle(color: Colors.black, fontSize: 14),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  SizedBox(
-                    height: 50,
-                    width: 300,
-                    child: Row(
-                      children: <Widget>[
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: _selectedPriority == 'High'
-                                  ? Colors.red[400]
-                                  : Colors.grey,
-                              elevation: _selectedPriority == 'High' ? 20 : 5,
-                              minimumSize: _selectedPriority == 'High'
-                                  ? const Size.square(45)
-                                  : const Size.square(35),
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)))),
-                          onPressed: () {
-                            setState(() {
-                              _selectedPriority = 'High';
-                              print(_selectedPriority);
-                              _textFieldController3.text = _selectedPriority;
-
-                              // _selectedColor = Colors.green!;
-                            });
-                          },
-                          child: const SizedBox(
-                            width: 20,
-                            child: Text(
-                              'High',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _selectedPriority = 'Medium';
-                              print(_selectedPriority);
-                              _textFieldController3.text = _selectedPriority;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: _selectedPriority == 'Medium'
-                                  ? Colors.orange[300]
-                                  : Colors.grey,
-                              elevation: _selectedPriority == 'Medium' ? 20 : 5,
-                              minimumSize: _selectedPriority == 'Medium'
-                                  ? const Size.square(45)
-                                  : const Size.square(35),
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)))),
-                          child: const SizedBox(
-                            width: 35,
-                            child: Text(
-                              'Medium',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 5),
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              _selectedPriority = 'Low';
-                              print(_selectedPriority);
-                              _textFieldController3.text = _selectedPriority;
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: _selectedPriority == 'Low'
-                                  ? Colors.blue[300]
-                                  : Colors.grey,
-                              elevation: _selectedPriority == 'Low' ? 20 : 5,
-                              minimumSize: _selectedPriority == 'Low'
-                                  ? const Size.square(45)
-                                  : Size.square(35),
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(5)))),
-                          child: const SizedBox(
-                            width: 20,
-                            child: Text(
-                              'Low',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  const Row(
-                    children: [
-                      Text(
-                        'Attachment',
-                        style: TextStyle(color: Colors.black, fontSize: 14),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 5),
-                  Row(
-                    children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            border: Border.all(
-                                style: BorderStyle.solid, width: 1.0)),
-                        child: IconButton(
-                          icon: const Icon(Icons.add),
-                          color: Colors.black,
-                          iconSize: 20,
-                          onPressed: () {
-                            _showPicker(context: context);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              Center(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.deepPurpleAccent[100],
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                    _addOrUpdateTodoItem(
-                      todo,
-                      _textFieldController.text,
-                      _textFieldController2.text,
-                      _textFieldController3.text,
-                      _selectedPriority,
-                    );
-
-                    Todo newTodo = Todo(
-                      title: _textFieldController.text,
-                      description: _textFieldController2.text,
-                      completed: false,
-                      text: _textFieldController3.text,
-                      color: _selectedPriority,
-                    );
-                    print('*****************');
-                    print(_textFieldController.text);
-                    print('*****************');
-                    print(newTodo.color);
-                    print('*****************');
-
-                    if (todo == null) {
-                      await _todoProvider.insert(newTodo);
-                    } else {
-                      await _todoProvider.update(newTodo);
-                    }
-
-                    await _loadTodos();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(10.0),
-                    child: Text(
-                      'Create Task',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Color _getPriorityColor(String priority) {
-    switch (priority) {
-      case 'High':
-        return Colors.red[400]!;
-      case 'Medium':
-        return Colors.orange[300]!;
-      case 'Low':
-        return Colors.blue[300]!;
-      default:
-        return Colors.grey;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -579,7 +239,18 @@ class _FirstscreenState extends State<Firstscreen> {
                         todo: todo,
                         onTodoChanged: handleTodoChange,
                         removeTodo: _deleteTodoItem,
-                        onTodoEdit: () => display(todo: todo));
+                        onTodoEdit: () {
+                          // Access context using the Builder widget
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              // Assuming todoProvider is accessible from the same widget tree
+                              TodoProvider todoProvider = TodoProvider();
+                              return DisplayAlertDialog(
+                                  todoProvider: todoProvider, todo: todo);
+                            },
+                          );
+                        });
                   }).toList(),
                 ),
               ),
@@ -592,7 +263,15 @@ class _FirstscreenState extends State<Firstscreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent[80],
-        onPressed: () => display(),
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              TodoProvider todoProvider = TodoProvider();
+              return DisplayAlertDialog(todoProvider: todoProvider, todo: null);
+            },
+          );
+        },
         tooltip: 'Add a Todo',
         child: const Icon(Icons.add),
       ),
@@ -600,176 +279,6 @@ class _FirstscreenState extends State<Firstscreen> {
     );
   }
 
-  void _showPicker({
-    required BuildContext context,
-  }) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Photo Library'),
-                onTap: () {
-                  getImage(ImageSource.gallery);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('Camera'),
-                onTap: () {
-                  getImage(ImageSource.camera);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Future getImage(
-    ImageSource img,
-  ) async {
-    final pickedFile = await picker.pickImage(source: img);
-    XFile? xfilePick = pickedFile;
-    setState(
-      () {
-        if (xfilePick != null) {
-          galleryFile = File(pickedFile!.path);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(// is this context <<<
-              const SnackBar(content: Text('Nothing is selected')));
-        }
-      },
-    );
-  }
 }
 
-class TodoItem extends StatelessWidget {
-  TodoItem({
-    required this.todo,
-    required this.onTodoChanged,
-    required this.removeTodo,
-    required this.onTodoEdit,
-  }) : super(key: Key(todo.title));
 
-  final Todo todo;
-  final void Function(Todo todo) onTodoChanged;
-  final  void Function(Todo todo) removeTodo;
-  final VoidCallback onTodoEdit;
-
-  TextStyle? _getTextStyle(bool checked) {
-    if (!checked) return null;
-
-    return const TextStyle(
-      color: Colors.black54,
-      decoration: TextDecoration.lineThrough,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-        onTap: onTodoEdit,
-        child: ListView(
-            shrinkWrap: true,
-            // physics: const AlwaysScrollableScrollPhysics(),
-            children: <Widget>[
-              Container(
-                  height: 86,
-                  decoration: BoxDecoration(
-                    // color: Colors.red,
-                    border: Border.all(color: Colors.black12),
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  ),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: Column(
-                            children: <Widget>[
-                              const SizedBox(height: 10),
-                              Text(
-                                todo.title,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Column(
-                                children: [
-                                  Text(
-                                    todo.description,
-                                    style: const TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: <Widget>[
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      _getPriorityColor(todo.color),
-                                  elevation: 5,
-                                  // Use the priority color
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  onTodoChanged(todo);
-                                },
-                                child: Text(
-                                  todo.color,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () {
-                                  removeTodo(todo);
-                                },
-                                color: Colors.grey,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]))
-            ]));
-  }
-
-  Color _getPriorityColor(String priority) {
-    Color? color;
-    switch (priority) {
-      case 'High':
-        color = Colors.red[400];
-        break;
-      case 'Medium':
-        color = Colors.orange[300];
-        break;
-      case 'Low':
-        color = Colors.blue[300];
-        break;
-    }
-    return color ?? Colors.grey; // Use Colors.grey as a fallback color
-  }
-}
