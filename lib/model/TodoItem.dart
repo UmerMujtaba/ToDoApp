@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'todoprovider.dart';
-import 'todo.dart';
-import '../screens//DisplayDialog.dart';
-import '../screens//FirstScreen.dart';
+import 'TodoProvider.dart';
+import 'TodoClass.dart';
+import '../screens/firstscreen/ShowDialog.dart';
 
 class TodoItem extends StatelessWidget {
   TodoItem({

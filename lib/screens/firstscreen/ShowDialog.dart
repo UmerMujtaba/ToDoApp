@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import '/model/todo.dart';
+import '/model/TodoClass.dart';
 import 'package:image_picker/image_picker.dart';
-import '/model/todoprovider.dart';
+import '/model/TodoProvider.dart';
 
 class DisplayAlertDialog extends StatefulWidget {
   final Todo? todo;

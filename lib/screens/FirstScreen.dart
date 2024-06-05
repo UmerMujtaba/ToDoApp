@@ -1,12 +1,12 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:instagramclone/screens/returnlist.dart';
-import '/model/todo.dart';
+import 'package:instagramclone/screens/firstscreen/ReturningList.dart';
+import '/model/TodoClass.dart';
 import '/component/DrawerCheck.dart';
 import '/component/BottomBar.dart';
-import '/model/todoprovider.dart';
-import 'DisplayDialog.dart';
-import 'categoryfirstscreen.dart';
+import '/model/TodoProvider.dart';
+import 'firstscreen/ShowDialog.dart';
+import 'firstscreen/Category.dart';
 
 class Firstscreen extends StatefulWidget {
   final TodoProvider todoProvider;
@@ -29,10 +29,6 @@ class _FirstscreenState extends State<Firstscreen> {
     super.initState();
     _todoProvider = widget.todoProvider;
     // openDatabase();
-    _loadTodos();
-  }
-  void _handleTodoAdded() {
-    // Reload todos from database
     _loadTodos();
   }
 
@@ -89,7 +85,7 @@ class _FirstscreenState extends State<Firstscreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               const Row(
                 children: [
                   Padding(
@@ -104,7 +100,7 @@ class _FirstscreenState extends State<Firstscreen> {
                   ),
                 ],
               ),
-              CategoryRow(),
+              const CategoryRow(),
               const Padding(
                 padding: EdgeInsets.fromLTRB(30, 15, 0, 10),
                 child: Row(
