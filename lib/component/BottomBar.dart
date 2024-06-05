@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../pages/FirstScreen.dart';
-import '../pages/FrontScreen.dart';
-import '../pages/PremiumScreen.dart';
-import '../pages/SettingsScreen.dart';
+import '../screens/FirstScreen.dart';
+import '../screens/FrontScreen.dart';
+import '../screens/PremiumScreen.dart';
+import '../screens/SettingsScreen.dart';
 import 'DrawerCheck.dart';
 import '../model/todoprovider.dart';
 
@@ -101,7 +101,7 @@ class _barState extends State<bar> {
 
   Widget currentscreen = Firstscreen(todoProvider: TodoProvider()); // Pass _todoProvider to FirstScreen
 
-  final PageStorageBucket bucket = PageStorageBucket();
+  // final storageBucket bucket = storageBucket();
 
   @override
   Widget build(BuildContext context) {
@@ -143,7 +143,7 @@ class _barState extends State<bar> {
   }
 }
 
-// PageStorage(
+// storage(
 // child: currentscreen,
 // bucket: bucket,
 // ),

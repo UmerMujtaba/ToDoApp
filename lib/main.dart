@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'component/loading.dart';
-import 'pages/FrontScreen.dart';
-import 'pages/FirstScreen.dart';
-import 'pages/SettingsScreen.dart';
+import 'screens/FrontScreen.dart';
+import 'screens/FirstScreen.dart';
+import 'screens/SettingsScreen.dart';
 import 'component/BottomBar.dart';
 import 'component/DrawerCheck.dart';
-import 'pages/PremiumScreen.dart';
+import 'screens/PremiumScreen.dart';
 import 'component/drop.dart';
 import 'model/todoprovider.dart';
 

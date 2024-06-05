@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'todoprovider.dart';
 import 'todo.dart';
-import '../pages/DisplayDialog.dart';
-import '../pages/FirstScreen.dart';
+import '../screens//DisplayDialog.dart';
+import '../screens//FirstScreen.dart';
 
 class TodoItem extends StatelessWidget {
   TodoItem({
@@ -10,6 +10,7 @@ class TodoItem extends StatelessWidget {
     required this.onTodoChanged,
     required this.removeTodo,
     required this.onTodoEdit,
+    required UniqueKey key,
   }) : super(key: Key(todo.title));
 
   final Todo todo;

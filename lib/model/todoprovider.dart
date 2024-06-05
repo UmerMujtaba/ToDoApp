@@ -1,93 +1,64 @@
-// todoprovider.dart
 import 'package:sqflite/sqflite.dart';
 import 'todo.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
 
 class TodoProvider {
   late Database db;
-  bool _isOpen = false; // Add a boolean flag to track if the database is opened
 
-  bool get isOpen => _isOpen;
+  Future<void> open(String path) async {
+    final databasePath = await getDatabasesPath();
+    final dbPath = join(databasePath, '$path.db');
 
-  Future open(String path) async {
-    try {
-      db = await openDatabase(path, version: 1, onCreate: (db, version) async {
+    db = await openDatabase(
+      dbPath,
+      version: 1,
+      onCreate: (Database db, int version) async {
         await db.execute('''
-          create table $tableTodo ( 
-            $columnId integer primary key autoincrement, 
-            $columnTitle text not null,
-            $columnDescription text not null,
-            $columnCompleted text not null,
-            $columnText text not null,
-            $columnColor text not null)
+          CREATE TABLE todo (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            completed INTEGER NOT NULL,
+            text TEXT NOT NULL,
+            color TEXT NOT NULL
+          )
         ''');
-      });
-      _isOpen = true;
-      print('Database opened');
-    } catch (e) {
-      print('Error opening database: $e');
-      // Handle the error, e.g., show an error message or throw an exception
-      throw e;
-    }
+      },
+    );
   }
 
   Future<Todo> insert(Todo todo) async {
-    print('i am in insert');
-    try {
-      todo.id = await db.insert(
-        tableTodo,
-        todo.toMap(), // Ensure that the "description" field is included in the map
-      );
-      print('Data inserted successfully');
-      return todo;
-    } catch (e) {
-      print('Error inserting data: $e');
-      throw e; // Rethrow the exception to handle it in the calling code if needed
-    }
-  }
-
-  Future<Todo?> getTodo(int id) async {
-    List<Map> maps = await db.query(tableTodo,
-        columns: [
-          columnId,
-          columnTitle,
-          columnDescription,
-          columnCompleted,
-          columnText,
-          columnColor
-        ],
-        where: '$columnId = ?',
-        whereArgs: [id]);
-    if (maps.isNotEmpty) {
-      return Todo.fromMap(maps.first as Map<String, Object?>);
-    }
-    return null;
+    todo.id = await db.insert('todo', todo.toMap());
+    return todo;
   }
 
   Future<List<Todo>> getAllTodos() async {
-    print('IN GET ALL TODOS');
-    List<Map<String, dynamic>> maps = await db.query(tableTodo);
-    return List.generate(maps.length, (i) {
-      return Todo.fromMap(maps[i]);
-    });
+    try {
+      if (db == null) {
+        throw Exception("Database is not initialized. Call open() before querying.");
+      }
+      final List<Map<String, dynamic>> maps = await db!.query('todo');
+      return List.generate(maps.length, (i) {
+        return Todo.fromMap(maps[i]);
+      });
+    } catch (e) {
+      print('Error fetching todos: $e');
+      return [];
+    }
+  }
+
+
+
+
+  Future<int> update(Todo todo) async {
+    return await db
+        .update('todo', todo.toMap(), where: 'id = ?', whereArgs: [todo.id]);
   }
 
   Future<int> delete(int id) async {
-    return await db.delete(tableTodo, where: '$columnId = ?', whereArgs: [id]);
+    return await db.delete('todo', where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<int> update(Todo todo) async {
-    return await db.update(tableTodo, todo.toMap(),
-        where: '$columnId = ?', whereArgs: [todo.id]);
-  }
-
-  Future close() async => db.close();
+  Future<void> close() async => db.close();
 }
-
-// Constants for table and column names
-const String tableTodo = 'todo';
-const String columnId = 'id';
-const String columnTitle = 'title';
-const String columnDescription = 'description';
-const String columnCompleted = 'completed';
-const String columnText = 'text';
-const String columnColor = 'color';

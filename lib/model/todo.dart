@@ -17,7 +17,7 @@ class Todo {
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
-      columnTitle: title,
+      columnTitle: this.title,
       columndescription: description,
       columnCompleted: completed ? 1 : 0,
       columnText: text,
