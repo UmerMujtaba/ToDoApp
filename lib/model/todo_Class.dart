@@ -43,12 +43,9 @@ class Todo {
   }
 }
 
-// Constants for column descriptions (replace with your actual column descriptions)
 const String columnId = 'id';
 const String columnTitle = 'title';
 const String columndescription = 'description';
 const String columnCompleted = 'completed';
 const String columnText = 'text';
 const String columnColor = 'color'; // Change to String for column name
-
-// Define your color constants if needed, but in this case, it's not necessary.

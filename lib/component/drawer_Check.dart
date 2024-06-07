@@ -101,13 +101,6 @@ class _drawerState extends State<drawer> {
                     const SizedBox(height: 20),
                   ],
                 ),
-                // trailing: IconButton(
-                //     icon: const Icon(
-                //       Icons.arrow_drop_down_sharp,
-                //       size: 40,
-                //       color: Colors.deepPurpleAccent,
-                //     ),
-                //     onPressed: () {})
               ),
               const Divider(height: 2),
               ListTile(

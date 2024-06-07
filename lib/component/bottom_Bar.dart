@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import '../screens/FirstScreen.dart';
-import '../screens/Startscreen.dart';
-import '../screens/PremiumScreen.dart';
-import '../screens/SettingsScreen.dart';
-import 'DrawerCheck.dart';
-import '../model/TodoProvider.dart';
+import '../screens/first_Screen.dart';
+import '../screens/start_Screen.dart';
+import '../screens/premium_Screen.dart';
+import '../screens/setting_Screen.dart';
+import 'drawer_Check.dart';
+import '../model/todo_Provider.dart';
 
 class bar extends StatefulWidget {
 
-  const bar({Key? key}) : super(key: key);
+  const bar({super.key});
 
   @override
   State<bar> createState() => _barState();
@@ -17,7 +17,7 @@ class bar extends StatefulWidget {
 
 class _barState extends State<bar> {
   TodoProvider todoProvider = TodoProvider();
-  //fun to show calendar in a dialog box
+
   Future<void> calendar() async {
     DateTime firstDate = DateTime(2010, 10, 16);
     DateTime lastDate = DateTime(2030, 3, 14);
@@ -55,7 +55,6 @@ class _barState extends State<bar> {
                   const SizedBox(height: 20),
                   Text(
                       "Selected date: ${selectedDate.day}-${selectedDate.month}-${selectedDate.year}"),
-                  // Splitting the selected date into year, month, and day
                 ],
               );
             },
@@ -99,9 +98,6 @@ class _barState extends State<bar> {
     const drawer(title: 'ok'),
   ];
 
-  Widget currentscreen = Firstscreen(todoProvider: TodoProvider()); // Pass _todoProvider to FirstScreen
-
-  // final storageBucket bucket = storageBucket();
 
   @override
   Widget build(BuildContext context) {
@@ -142,48 +138,3 @@ class _barState extends State<bar> {
     );
   }
 }
-
-// storage(
-// child: currentscreen,
-// bucket: bucket,
-// ),
-// floatingActionButton: FloatingActionButton(
-// child: Icon(Icons.add),
-// onPressed: () {},
-// ),
-// floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-// bottomNavigationBar: BottomAppBar(
-// shape: CircularNotchedRectangle(),
-// notchMargin: 10,
-// child: Container(
-// height: 60,
-// child: Row(
-// mainAxisAlignment: MainAxisAlignment.spaceBetween,
-// children: <Widget>[
-// MaterialButton(
-// minWidth: 40,
-// onPressed: () {
-// setState(() {
-// currentscreen=Firstscreen();
-// currentTab=0;
-// });
-// },
-// child: Column (
-// mainAxisAlignment: MainAxisAlignment.center,
-// children: [
-// Icon(Icons.dashboard,
-// color: currentTab == 0 ? Colors.blue : Colors.grey,),
-// Text(
-// 'Dashboard',
-// style: TextStyle(
-// color: currentTab==0?Colors.blue:Colors.grey
-// ),
-// )
-//
-// ],
-// ),
-// )
-// ],
-// )
-// )
-// ),grey

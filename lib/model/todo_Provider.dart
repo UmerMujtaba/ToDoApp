@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'TodoClass.dart';
+import 'todo_Class.dart';
 import 'package:path/path.dart';
 
 class TodoProvider {
@@ -27,9 +27,9 @@ class TodoProvider {
     );
   }
 
-  Future<Todo> insert(Todo todo) async {
-    todo.id = await db.insert('todo', todo.toMap());
-    return todo;
+  Future<int> insert(Todo todo) async {
+    return await db.insert('todo', todo.toMap());
+    // return todo;
   }
 
   Future<List<Todo>> getAllTodos() async {
@@ -46,8 +46,6 @@ class TodoProvider {
       return [];
     }
   }
-
-
 
 
   Future<int> update(Todo todo) async {

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'component/loading.dart';
-import 'screens/Startscreen.dart';
-import 'screens/FirstScreen.dart';
-import 'screens/SettingsScreen.dart';
-import 'component/BottomBar.dart';
-import 'component/DrawerCheck.dart';
-import 'screens/PremiumScreen.dart';
+import 'screens/start_Screen.dart';
+import 'screens/first_Screen.dart';
+import 'screens/setting_Screen.dart';
+import 'component/bottom_Bar.dart';
+import 'component/drawer_Check.dart';
+import 'screens/premium_Screen.dart';
 import 'component/drop.dart';
-import 'model/TodoProvider.dart';
+import 'model/todo_Provider.dart';
 
 void main() => runApp(MyApp());
 
