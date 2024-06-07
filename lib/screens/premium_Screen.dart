@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagramclone/screens/premiumscreen/Facilities.dart';
+import 'package:instagramclone/screens/premiumscreen/facilities.dart';
 
 class Premium extends StatelessWidget {
   const Premium({Key? key}) : super(key: key);
@@ -77,8 +77,7 @@ class Premium extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 10),
-
-              Facility(),
+              const Facility(),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 50),
                 child: ElevatedButton(

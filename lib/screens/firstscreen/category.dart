@@ -8,13 +8,17 @@ class CategoryRow extends StatelessWidget {
     return const Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        CategoryCard(
-          icon: Icons.person_rounded,
-          label: 'Personal',
+        InkWell(
+          child: CategoryCard(
+            icon: Icons.person_rounded,
+            label: 'Personal',
+          ),
         ),
-        CategoryCard(
-          icon: Icons.calendar_month_rounded,
-          label: 'Birthday',
+        InkWell(
+          child: CategoryCard(
+            icon: Icons.calendar_month_rounded,
+            label: 'Birthday',
+          ),
         ),
       ],
     );

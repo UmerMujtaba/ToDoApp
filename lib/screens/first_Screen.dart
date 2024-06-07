@@ -1,12 +1,12 @@
-
 import 'package:flutter/material.dart';
-import 'package:instagramclone/screens/firstscreen/ReturningList.dart';
-import '/model/TodoClass.dart';
-import '/component/DrawerCheck.dart';
-import '/component/BottomBar.dart';
-import '/model/TodoProvider.dart';
-import 'firstscreen/ShowDialog.dart';
-import 'firstscreen/Category.dart';
+import 'package:instagramclone/screens/firstscreen/returning_List.dart';
+import 'package:sqflite/sqflite.dart';
+import '/model/todo_Class.dart';
+import '/component/drawer_Check.dart';
+import '/component/bottom_Bar.dart';
+import '/model/todo_Provider.dart';
+import 'firstscreen/show_Dialog.dart';
+import 'firstscreen/category.dart';
 
 class Firstscreen extends StatefulWidget {
   final TodoProvider todoProvider;
@@ -19,21 +19,17 @@ class Firstscreen extends StatefulWidget {
 
 class _FirstscreenState extends State<Firstscreen> {
   late TodoProvider _todoProvider;
-
-  final List<Todo> todos = <Todo>[];
+  List<Todo> todos = <Todo>[];
   Todo? _editingTodo;
-
 
   @override
   void initState() {
     super.initState();
     _todoProvider = widget.todoProvider;
-    // openDatabase();
-    _loadTodos();
+    openDatabase();
   }
 
   Future<void> _loadTodos() async {
-    print('load todos of first screen dialog');
     try {
       List<Todo> loadedTodos = await _todoProvider.getAllTodos();
       setState(() {
@@ -44,18 +40,31 @@ class _FirstscreenState extends State<Firstscreen> {
       print('Error loading todos: $e');
     }
   }
+
+  Future<void> openDatabase() async {
+    try {
+      await _todoProvider
+          .open('sample'); // Open the database with the desired name
+      print('Database opened successfully');
+      await _loadTodos();
+    } catch (e) {
+      print('Error opening database: $e');
+    }
+  }
+
   @override
   void dispose() {
     _todoProvider.close();
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     TodoProvider todoProvider = TodoProvider();
     return Scaffold(
       backgroundColor: Colors.white,
-      body:  SafeArea(
+      body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -116,7 +125,10 @@ class _FirstscreenState extends State<Firstscreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              ReturnList(todoProvider: todoProvider),
+              ReturnList(
+                todoProvider: _todoProvider,
+                todos: todos,
+              ),
             ],
           ),
         ),
@@ -130,8 +142,17 @@ class _FirstscreenState extends State<Firstscreen> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              TodoProvider todoProvider = TodoProvider();
-              return DisplayAlertDialog(todoProvider: todoProvider, todo: null, onTodoUpdated: _loadTodos);
+              return DisplayAlertDialog(
+                todoProvider: _todoProvider,
+                todo: null,
+                onTodoUpdated: () {
+                  setState(
+                    () {
+                      _loadTodos();  //used to load todos after adding or updating
+                    },
+                  );
+                },
+              );
             },
           );
         },
