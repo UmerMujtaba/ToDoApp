@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagramclone/screens/first_Screen.dart';
-import 'package:instagramclone/screens/firstscreen/returning_List.dart';
+
 import 'dart:io';
 import '/model/todo_Class.dart';
 import 'package:image_picker/image_picker.dart';

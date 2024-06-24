@@ -1,7 +1,8 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagramclone/screens/first_Screen.dart';
+
 import '../component/button.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,7 +12,13 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
+final _auth = FirebaseAuth.instance;
+
 class _LoginScreenState extends State<LoginScreen> {
+  late String email;
+  late String password;
+  bool showSpinner = false;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -47,7 +54,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     //labelText: '',
                     hintText: 'Phone number, email or user name'),
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: const TextStyle(color: Colors.black, fontSize: 14),
+                onChanged: (value) {
+                  email = value;
+                  //Do something with the user input.
+                },
               ),
             ),
             const SizedBox(height: 10),
@@ -79,7 +90,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   hintText: 'Password',
                 ),
-                style: const TextStyle(color: Colors.white, fontSize: 14),
+                style: const TextStyle(color: Colors.black, fontSize: 14),
+                onChanged: (value) {
+                  password = value;
+                  //Do something with the user input.
+                },
               ),
             ),
             const SizedBox(height: 40),
@@ -87,11 +102,25 @@ class _LoginScreenState extends State<LoginScreen> {
                 text: 'LOGIN',
                 height: 44.0,
                 // padding: const EdgeInsets.fromLTRB(120, 10, 120, 10),
-                onPressed: () {
+                onPressed: () async {
                   Navigator.pushNamed(context, '/');
                   // Simulate a delay for loading
-                  Future.delayed(const Duration(seconds: 1), () {
-                    Navigator.pushReplacementNamed(context, '/first');
+                  Future.delayed(const Duration(seconds: 1), () async {
+                    setState(() {
+                      showSpinner = true;
+                    });
+                    try {
+                      final user = await _auth.signInWithEmailAndPassword(
+                          email: email, password: password);
+                      if (user != null) {
+                        Navigator.pushNamed(context, '/first');
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                    setState(() {
+                      showSpinner = false;
+                    });
                   });
                 }),
             const SizedBox(height: 15),
