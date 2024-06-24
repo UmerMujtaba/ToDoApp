@@ -104,11 +104,19 @@ class _drawerState extends State<drawer> {
               ),
               const Divider(height: 2),
               ListTile(
-                leading: Icon(Icons.reorder,
+                leading: Icon(Icons.backup_outlined,
                     size: 30, color: Colors.blueAccent[100]),
-                title: const Text('Reorder Tasks'),
+                title: const Text('Back up'),
                 onTap: () {
-                  // Add your onTap logic for item 1 here
+                  Navigator.pushNamed(context, '/login');
+                },
+              ),
+              ListTile(
+                leading:
+                Icon(Icons.restore, size: 30, color: Colors.blueAccent[100]),
+                title: const Text('Restore'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/login');
                 },
               ),
               ListTile(
@@ -119,12 +127,7 @@ class _drawerState extends State<drawer> {
                   Navigator.pushNamed(context, '/premium');
                 },
               ),
-              ListTile(
-                leading:
-                    Icon(Icons.star, size: 30, color: Colors.blueAccent[100]),
-                title: const Text('Rate us'),
-                onTap: () {},
-              ),
+
               ListTile(
                 leading: Icon(Icons.settings,
                     size: 30, color: Colors.blueAccent[100]),
