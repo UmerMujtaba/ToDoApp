@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:instagramclone/screens/login_screen.dart';
+import 'package:instagramclone/screens/registeration_screen.dart';
 import 'component/loading.dart';
 import 'screens/start_Screen.dart';
 import 'screens/first_Screen.dart';
 import 'screens/setting_Screen.dart';
 import 'component/bottom_Bar.dart';
-import 'component/drawer_Check.dart';
+import 'component/drawer.dart';
 import 'screens/premium_Screen.dart';
-import 'component/drop.dart';
 import 'model/todo_Provider.dart';
 
 void main() => runApp(MyApp());
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
         '/bar': (context) => const bar(),
         '/drawer': (context) => const drawer(title: 'ok',),
         '/premium': (context) => const Premium(),
-        '/d': (context)=>const DropButton(),
+        '/login':(context)=>const LoginScreen(),
+        '/register':(context)=>const RegistrationScreen(),
       },
     );
   }
