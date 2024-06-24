@@ -26,7 +26,6 @@ class _ReturnListState extends State<ReturnList> {
     super.initState();
     _todoProvider = widget.todoProvider;
     _todos = widget.todos;
-
   }
 
   Future<void> openDatabase() async {

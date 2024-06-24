@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import '../screens/first_Screen.dart';
+import '../screens/main_Screen.dart';
 import '../screens/start_Screen.dart';
 import '../screens/premium_Screen.dart';
 import '../screens/setting_Screen.dart';
 import 'drawer.dart';
 import '../model/todo_Provider.dart';
 
-class bar extends StatefulWidget {
-
-  const bar({super.key});
+class Bar extends StatefulWidget {
+  const Bar({super.key});
 
   @override
-  State<bar> createState() => _barState();
-
+  State<Bar> createState() => _BarState();
 }
 
-class _barState extends State<bar> {
+class _BarState extends State<Bar> {
   TodoProvider todoProvider = TodoProvider();
 
   Future<void> calendar() async {
@@ -91,13 +89,12 @@ class _barState extends State<bar> {
 
   int currentTab = 0;
   final List<Widget> screens = [
-    Firstscreen(todoProvider: TodoProvider()),
-    const Frontscreen(),
+    MainScreen(todoProvider: TodoProvider()),
+    const StartScreen(),
     const Premium(),
     const Setting(),
-    const drawer(title: 'ok'),
+    const DrawerApp(title: 'ok'),
   ];
-
 
   @override
   Widget build(BuildContext context) {

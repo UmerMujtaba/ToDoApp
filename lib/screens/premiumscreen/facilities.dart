@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class Facility extends StatelessWidget {
-  const Facility({Key? key}) : super(key: key);
+  const Facility({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return  const Padding(
+    return const Padding(
       padding: EdgeInsets.symmetric(horizontal: 60),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

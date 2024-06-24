@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class Frontscreen extends StatelessWidget {
-  const Frontscreen({Key? key}) : super(key: key);
+class StartScreen extends StatelessWidget {
+  const StartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class Frontscreen extends StatelessWidget {
                           Navigator.pushNamed(context, '/');
                           // Simulate a delay for loading
                           Future.delayed(const Duration(seconds: 1), () {
-                            Navigator.pushReplacementNamed(context, '/first');
+                            Navigator.pushReplacementNamed(context, '/main');
                           });
                         },
                         child: const Text(

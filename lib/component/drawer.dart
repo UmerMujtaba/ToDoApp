@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
 
-class drawer extends StatefulWidget {
-  const drawer({super.key, required this.title});
+class DrawerApp extends StatefulWidget {
+  const DrawerApp({super.key, required this.title});
 
   final String title;
 
   @override
-  State<drawer> createState() => _drawerState();
+  State<DrawerApp> createState() => _DrawerAppState();
 }
 
-class _drawerState extends State<drawer> {
-  int _selectedIndex = 0;
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
+class _DrawerAppState extends State<DrawerApp> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -112,8 +104,8 @@ class _drawerState extends State<drawer> {
                 },
               ),
               ListTile(
-                leading:
-                Icon(Icons.restore, size: 30, color: Colors.blueAccent[100]),
+                leading: Icon(Icons.restore,
+                    size: 30, color: Colors.blueAccent[100]),
                 title: const Text('Restore'),
                 onTap: () {
                   Navigator.pushNamed(context, '/login');
@@ -127,7 +119,6 @@ class _drawerState extends State<drawer> {
                   Navigator.pushNamed(context, '/premium');
                 },
               ),
-
               ListTile(
                 leading: Icon(Icons.settings,
                     size: 30, color: Colors.blueAccent[100]),

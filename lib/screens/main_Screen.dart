@@ -8,16 +8,16 @@ import 'firstscreen/returning_List.dart';
 import 'firstscreen/show_Dialog.dart';
 import 'firstscreen/category.dart';
 
-class Firstscreen extends StatefulWidget {
+class MainScreen extends StatefulWidget {
   final TodoProvider todoProvider;
 
-  const Firstscreen({super.key, required this.todoProvider});
+  const MainScreen({super.key, required this.todoProvider});
 
   @override
-  State<Firstscreen> createState() => _FirstscreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _FirstscreenState extends State<Firstscreen> {
+class _MainScreenState extends State<MainScreen> {
   late TodoProvider _todoProvider;
   List<Todo> todos = <Todo>[];
   Todo? _editingTodo;
@@ -57,7 +57,6 @@ class _FirstscreenState extends State<Firstscreen> {
     _todoProvider.close();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +132,7 @@ class _FirstscreenState extends State<Firstscreen> {
           ),
         ),
       ),
-      drawer: const drawer(
+      drawer: const DrawerApp(
         title: 'New',
       ),
       floatingActionButton: FloatingActionButton(
@@ -148,7 +147,7 @@ class _FirstscreenState extends State<Firstscreen> {
                 onTodoUpdated: () {
                   setState(
                     () {
-                      _loadTodos();  //used to load todos after adding or updating
+                      _loadTodos(); //used to load todos after adding or updating
                     },
                   );
                 },
@@ -159,7 +158,7 @@ class _FirstscreenState extends State<Firstscreen> {
         tooltip: 'Add a Todo',
         child: const Icon(Icons.add),
       ),
-      bottomNavigationBar: const bar(),
+      bottomNavigationBar: const Bar(),
     );
   }
 }

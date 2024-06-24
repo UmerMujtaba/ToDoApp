@@ -59,7 +59,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
       todo.description = description;
       todo.text = text;
       todo.color = color;
-     var result= await _todoProvider.update(todo);
+      var result = await _todoProvider.update(todo);
       widget.onTodoUpdated();
     } else {
       // Add new todo
@@ -71,7 +71,6 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
         color: color,
       );
       await _todoProvider.insert(newTodo);
-
     }
   }
 
@@ -89,7 +88,6 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
   }
 
   Color _getPriorityColor(String color) {
-
     switch (color) {
       case 'red':
         return Colors.red;
@@ -325,22 +323,17 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 ),
               ),
               onPressed: () async {
-
                 String title = _textFieldController.text;
                 String description = _textFieldController2.text;
                 String text = _textFieldController3.text;
                 String color = getColorForPriority(_selectedPriority);
 
-
                 await _addOrUpdateTodoItem(
                     widget.todo, title, description, text, color);
-
-
 
                 widget.onTodoUpdated();
 
                 Navigator.of(context).pop(true);
-
               },
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -397,10 +390,9 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
   }
 
   String getColorForPriority(String selectedPriority) {
-    if(selectedPriority=="High"){
-    return "Red";
-    }
-    else if(selectedPriority.contains("High"))
+    if (selectedPriority == "High") {
+      return "Red";
+    } else if (selectedPriority.contains("High"))
       return "Orange";
     else
       return "Blue";
