@@ -7,12 +7,13 @@ class CustomButton extends StatelessWidget {
   final VoidCallback onPressed; //to be changed depending on use
 
   const CustomButton({
-    Key? key,
+    super.key,
     required this.text,
-    this.height = 44.0, //const provided, if nt given in any screen it will be called there
+    this.height =
+        44.0, //const provided, if nt given in any screen it will be called there
     this.padding = const EdgeInsets.fromLTRB(50, 10, 50, 10),
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +37,8 @@ class CustomButton extends StatelessWidget {
         ),
         child: Text(
           text,
-          style: const TextStyle(color: Colors.white, fontSize: 14, letterSpacing: 2),
+          style: const TextStyle(
+              color: Colors.white, fontSize: 14, letterSpacing: 2),
         ),
       ),
     );

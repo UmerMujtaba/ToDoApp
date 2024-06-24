@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
-
-import '../component/button.dart';
-
+import '../component/custom_Button.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -17,7 +15,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   late String email;
   late String password;
   bool showSpinner = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,13 +87,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             filled: true,
                             fillColor: Colors.grey[300],
                             border: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Colors.white, width: 2.0),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 2.0),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             hintText: 'Enter Name',
                           ),
-                          style: const TextStyle(color: Colors.black, fontSize: 14),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14),
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -124,8 +122,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             filled: true,
                             fillColor: Colors.grey[300],
                             border: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Colors.white, width: 2.0),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 2.0),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             hintText: 'Enter Email',
@@ -134,7 +132,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             email = value;
                             //Do something with the user input.
                           },
-                          style: const TextStyle(color: Colors.black, fontSize: 14),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14),
                         ),
                       ),
                       const SizedBox(height: 15),
@@ -161,8 +160,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             filled: true,
                             fillColor: Colors.grey[300],
                             border: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: Colors.white, width: 2.0),
+                              borderSide: const BorderSide(
+                                  color: Colors.white, width: 2.0),
                               borderRadius: BorderRadius.circular(10.0),
                             ),
                             hintText: 'Enter Password',
@@ -171,7 +170,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             password = value;
                             //Do something with the user input.
                           },
-                          style: const TextStyle(color: Colors.black, fontSize: 14),
+                          style: const TextStyle(
+                              color: Colors.black, fontSize: 14),
                         ),
                       ),
                       const SizedBox(height: 30),
@@ -186,8 +186,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       showSpinner = true;
                     });
                     try {
-                      final newUser = await _auth.createUserWithEmailAndPassword(
-                          email: email, password: password);
+                      final newUser =
+                          await _auth.createUserWithEmailAndPassword(
+                              email: email, password: password);
                       if (newUser != null) {
                         Navigator.pushNamed(context, '/login');
                       }

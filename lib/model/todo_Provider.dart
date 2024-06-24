@@ -35,7 +35,8 @@ class TodoProvider {
   Future<List<Todo>> getAllTodos() async {
     try {
       if (db == null) {
-        throw Exception("Database is not initialized. Call open() before querying.");
+        throw Exception(
+            "Database is not initialized. Call open() before querying.");
       }
       final List<Map<String, dynamic>> maps = await db!.query('todo');
       return List.generate(maps.length, (i) {
@@ -46,7 +47,6 @@ class TodoProvider {
       return [];
     }
   }
-
 
   Future<int> update(Todo todo) async {
     return await db

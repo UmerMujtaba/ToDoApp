@@ -10,8 +10,6 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
-
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -91,7 +89,7 @@ class _SettingState extends State<Setting> {
             ),
           ),
         ),
-        bottomNavigationBar: const bar(),
+        bottomNavigationBar: const Bar(),
       ),
     );
   }
