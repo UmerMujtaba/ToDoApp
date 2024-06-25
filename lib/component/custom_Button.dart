@@ -11,7 +11,7 @@ class CustomButton extends StatelessWidget {
     required this.text,
     this.height =
         44.0, //const provided, if nt given in any screen it will be called there
-    this.padding = const EdgeInsets.fromLTRB(50, 10, 50, 10),
+    this.padding = const EdgeInsets.fromLTRB(40, 10, 40, 10),
     required this.onPressed,
   });
 

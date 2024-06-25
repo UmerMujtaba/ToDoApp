@@ -36,9 +36,11 @@ class _MainScreenState extends State<MainScreen> {
         todos.clear();
         todos.addAll(loadedTodos);
       });
+      print('Fetched ${loadedTodos.length} todos: $loadedTodos');
     } catch (e) {
       print('Error loading todos: $e');
     }
+
   }
 
   Future<void> openDatabase() async {
@@ -60,6 +62,7 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     TodoProvider todoProvider = TodoProvider();
     return Scaffold(
       backgroundColor: Colors.white,
@@ -128,12 +131,14 @@ class _MainScreenState extends State<MainScreen> {
                 todoProvider: _todoProvider,
                 todos: todos,
               ),
+
             ],
           ),
         ),
       ),
-      drawer: const DrawerApp(
+      drawer: DrawerApp(
         title: 'New',
+        todos: todos,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent[80],

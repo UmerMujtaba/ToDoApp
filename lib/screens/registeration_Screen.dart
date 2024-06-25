@@ -22,16 +22,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.white,
           leading: const Icon(
             Icons.arrow_back_ios_new_sharp,
             size: 20,
-            color: Colors.white,
+            color: Colors.black,
           ),
           title: const Text(
-            'Back',
+            'Sign up',
             style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
           ),
         ),
         body: ModalProgressHUD(
@@ -178,27 +179,62 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ],
                   ),
                 ),
-                CustomButton(
-                  text: 'REGISTER',
-                  height: 44.0,
-                  onPressed: () async {
-                    setState(() {
-                      showSpinner = true;
-                    });
-                    try {
-                      final newUser =
-                          await _auth.createUserWithEmailAndPassword(
-                              email: email, password: password);
-                      if (newUser != null) {
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
+                      text: 'LOGIN',
+                      height: 44.0,
+                      onPressed: () async {
+                        setState(() {
+                          showSpinner = true;
+                        });
+
                         Navigator.pushNamed(context, '/login');
-                      }
-                    } catch (e) {
-                      print(e);
-                    }
-                    setState(() {
-                      showSpinner = false;
-                    });
-                  },
+                      },
+                    ),
+                    SizedBox(width: 20),
+                    CustomButton(
+                      text: 'REGISTER',
+                      height: 44.0,
+                      onPressed: () async {
+                        setState(() {
+                          showSpinner = true;
+                        });
+                        try {
+                          final newUser =
+                              await _auth.createUserWithEmailAndPassword(
+                                  email: email, password: password);
+                          if (newUser != null) {
+                            Navigator.pushNamed(context, '/login');
+                          }
+                        } catch (e) {
+                          print(e);
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Error'),
+                                content: const Text(
+                                    'Enter Credentials, please try again.'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
+                        setState(() {
+                          showSpinner = false;
+                        });
+                      },
+                    ),
+                  ],
                 )
               ],
             ),

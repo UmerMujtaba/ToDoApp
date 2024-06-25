@@ -77,7 +77,7 @@ class _BarState extends State<Bar> {
       Navigator.pushNamed(context, '/drawer');
     }
     if (index == 1) {
-      Navigator.restorablePushReplacementNamed(context, '/first');
+      Navigator.restorablePushReplacementNamed(context, '/main');
     }
     if (index == 2) {
       await calendar();
@@ -93,7 +93,7 @@ class _BarState extends State<Bar> {
     const StartScreen(),
     const Premium(),
     const Setting(),
-    const DrawerApp(title: 'ok'),
+   // DrawerApp(title: 'ok'),
   ];
 
   @override
