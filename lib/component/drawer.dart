@@ -111,6 +111,8 @@ class _DrawerAppState extends State<DrawerApp> {
         width: MediaQuery.of(context).size.width *
             0.75, // 75% of screen will be occupied
         child: Drawer(
+          backgroundColor: Colors.black,
+
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
@@ -133,7 +135,8 @@ class _DrawerAppState extends State<DrawerApp> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: Colors.white,
+                    letterSpacing: 2,
                   ),
                 ),
                 onTap: () {
@@ -151,7 +154,7 @@ class _DrawerAppState extends State<DrawerApp> {
                           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                           child: Text(
                             'Personal',
-                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                         ),
                       ],
@@ -165,7 +168,7 @@ class _DrawerAppState extends State<DrawerApp> {
                           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                           child: Text(
                             'Wishlist',
-                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                         ),
                       ],
@@ -179,7 +182,7 @@ class _DrawerAppState extends State<DrawerApp> {
                           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                           child: Text(
                             'Birthday',
-                            style: TextStyle(fontSize: 16, color: Colors.black),
+                            style: TextStyle(fontSize: 16, color: Colors.white),
                           ),
                         ),
                       ],
@@ -192,7 +195,7 @@ class _DrawerAppState extends State<DrawerApp> {
               ListTile(
                 leading: const Icon(Icons.backup_outlined,
                     size: 30, color: Colors.blueAccent),
-                title: const Text('Back up'),
+                title: const Text('Back up',style: TextStyle(fontSize: 16, color: Colors.white),),
                 onTap: () async {
                   bool isLoggedIn = await _checkIfLoggedIn();
                   if (!isLoggedIn) {
@@ -208,7 +211,7 @@ class _DrawerAppState extends State<DrawerApp> {
               ListTile(
                 leading: const Icon(Icons.restore,
                     size: 30, color: Colors.blueAccent),
-                title: const Text('Restore'),
+                title: const Text('Restore',style: TextStyle(fontSize: 16, color: Colors.white),),
                 onTap: () {
                   Navigator.pushNamed(context, '/login');
                 },
@@ -216,7 +219,7 @@ class _DrawerAppState extends State<DrawerApp> {
               ListTile(
                 leading: const Icon(Icons.workspace_premium,
                     size: 30, color: Colors.blueAccent),
-                title: const Text('Premium'),
+                title: const Text('Premium',style: TextStyle(fontSize: 16, color: Colors.white),),
                 onTap: () {
                   Navigator.pushNamed(context, '/premium');
                 },
@@ -224,7 +227,7 @@ class _DrawerAppState extends State<DrawerApp> {
               ListTile(
                 leading: const Icon(Icons.settings,
                     size: 30, color: Colors.blueAccent),
-                title: const Text('Setting'),
+                title: const Text('Setting',style: TextStyle(fontSize: 16, color: Colors.white),),
                 onTap: () {
                   Navigator.pushNamed(context, '/setting');
                 },

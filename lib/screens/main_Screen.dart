@@ -40,7 +40,6 @@ class _MainScreenState extends State<MainScreen> {
     } catch (e) {
       print('Error loading todos: $e');
     }
-
   }
 
   Future<void> openDatabase() async {
@@ -62,10 +61,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     TodoProvider todoProvider = TodoProvider();
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black45,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -104,9 +102,11 @@ class _MainScreenState extends State<MainScreen> {
                     child: Text(
                       'Categories',
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2,
+                      ),
                     ),
                   ),
                 ],
@@ -119,9 +119,11 @@ class _MainScreenState extends State<MainScreen> {
                     Text(
                       'Today',
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2,
+                      ),
                     )
                   ],
                 ),
@@ -131,7 +133,6 @@ class _MainScreenState extends State<MainScreen> {
                 todoProvider: _todoProvider,
                 todos: todos,
               ),
-
             ],
           ),
         ),

@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../component/custom_Button.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -24,20 +23,20 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black,
           leading: const Icon(
             Icons.arrow_back_ios_new_sharp,
             size: 20,
-            color: Colors.black,
+            color: Colors.white,
           ),
           title: const Text(
             'Sign in',
             style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -48,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text(
                     'EMAIL',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold),
                   ),
@@ -61,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                     filled: true,
-                    fillColor: Colors.grey[300],
+                    fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderSide:
                           const BorderSide(color: Colors.white, width: 2.0),
@@ -84,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text(
                     'PASSWORD',
                     style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 16),
                   ),
@@ -97,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Colors.grey[300],
+                  fillColor: Colors.white,
                   border: OutlineInputBorder(
                     borderSide:
                         const BorderSide(color: Colors.white, width: 2.0),
@@ -134,12 +133,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('Error'),
+                            title: const Text('Error'),
                             content:
-                                Text('Invalid credentials, please try again.'),
+                                const Text('Enter credentials and try again.'),
                             actions: <Widget>[
                               TextButton(
-                                child: Text('OK'),
+                                child: const Text('OK'),
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
@@ -163,13 +162,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     height: 1.0,
                     width: 80.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
                 const Text(
                   'Social Logins',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),
@@ -178,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     height: 1.0,
                     width: 80.0,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -197,6 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Icon(
                     Icons.facebook_sharp,
                     size: 40,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(width: 30),
@@ -210,6 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: const Icon(
                     Icons.g_mobiledata,
                     size: 40,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -217,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 20),
             const Text(
               'Don\'t have an account?',
-              style: TextStyle(color: Colors.grey, fontSize: 15),
+              style: TextStyle(color: Colors.blueGrey, fontSize: 15),
             ),
             GestureDetector(
               onTap: () {
@@ -226,7 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text(
                 'REGISTER',
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2),

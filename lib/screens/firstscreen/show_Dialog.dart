@@ -117,11 +117,14 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
     return SizedBox(
       width: 360.0,
       height: 400.0,
+
       child: AlertDialog(
+        backgroundColor: Colors.grey,
         title: Text(
           widget.todo == null ? 'Create a Todo' : 'Update Todo',
           style: const TextStyle(
             fontWeight: FontWeight.bold,
+            color: Colors.black,
           ),
         ),
         content: Container(
@@ -134,7 +137,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Title',
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    style: TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.bold,),
                   ),
                 ],
               ),
@@ -152,8 +155,8 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
               const Row(
                 children: [
                   Text(
-                    'description',
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    'Description',
+                    style: TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.bold,),
                   ),
                 ],
               ),
@@ -172,7 +175,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Priorities',
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    style: TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.bold,),
                   ),
                 ],
               ),
@@ -284,7 +287,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Attachment',
-                    style: TextStyle(color: Colors.black, fontSize: 14),
+                    style: TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.bold,),
                   ),
                 ],
               ),
@@ -337,7 +340,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
               },
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(widget.todo == null ? 'Add Todo' : 'Update Todo'),
+                child: Text(widget.todo == null ? 'Add Todo' : 'Update Todo',style: TextStyle(color: Colors.white),),
               ),
             ),
           ),
@@ -348,6 +351,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
 
   void _showPicker({required BuildContext context}) {
     showModalBottomSheet(
+
       context: context,
       builder: (BuildContext context) {
         return SafeArea(

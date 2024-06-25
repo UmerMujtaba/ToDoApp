@@ -25,6 +25,7 @@ class _BarState extends State<Bar> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.grey,
           title: const Text(
             'Select a date',
             style: TextStyle(fontWeight: FontWeight.w500),
@@ -35,6 +36,9 @@ class _BarState extends State<Bar> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white
+                    ),
                     onPressed: () async {
                       DateTime? pickedDate = await showDatePicker(
                         context: context,
@@ -93,7 +97,7 @@ class _BarState extends State<Bar> {
     const StartScreen(),
     const Premium(),
     const Setting(),
-   // DrawerApp(title: 'ok'),
+    // DrawerApp(title: 'ok'),
   ];
 
   @override
@@ -102,15 +106,14 @@ class _BarState extends State<Bar> {
       height: 60,
       child: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 8,
+          backgroundColor: Colors.black54,
+          // Set background color to black
+          elevation: 6,
+          // Add elevation
           iconSize: 24,
-          selectedIconTheme:
-              const IconThemeData(color: Colors.blueAccent, size: 28),
+          selectedIconTheme: const IconThemeData(color: Colors.blueAccent, size: 28),
           selectedItemColor: Colors.blueAccent,
-          unselectedIconTheme: const IconThemeData(
-            color: Colors.grey,
-          ),
+          unselectedIconTheme: const IconThemeData(color: Colors.white),
           unselectedItemColor: Colors.deepOrangeAccent,
           showSelectedLabels: false,
           showUnselectedLabels: false,
