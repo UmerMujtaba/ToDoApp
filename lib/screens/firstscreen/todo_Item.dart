@@ -43,80 +43,84 @@ class _TodoItemState extends State<TodoItem> {
     return InkWell(
       onTap: widget.onTodoEdit,
       child: ListView(
+        physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         children: <Widget>[
-          Container(
-            height: 86,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.black12),
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: Column(
-                    children: <Widget>[
-                      const SizedBox(height: 10),
-                      Text(
-                        widget.todo.title,
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Container(
+              height: 86,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.white),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: <Widget>[
+                        const SizedBox(height: 10),
+                        Text(
+                          widget.todo.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10),
-                      Column(
-                        children: [
-                          Text(
-                            widget.todo.description,
-                            style: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14,
+                        const SizedBox(height: 10),
+                        Column(
+                          children: [
+                            Text(
+                              widget.todo.description,
+                              style: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      children: <Widget>[
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _getPriorityColor(widget.todo.color),
+                            elevation: 5,
+                            // Use the priority color
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: <Widget>[
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _getPriorityColor(widget.todo.color),
-                          elevation: 5,
-                          // Use the priority color
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                          onPressed: () {
+                            widget.onTodoEdit();
+                          },
+                          child: Text(
+                            widget.todo.text,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                            ),
                           ),
                         ),
-                        onPressed: () {
-                          widget.onTodoEdit();
-                        },
-                        child: Text(
-                          widget.todo.text,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 12,
-                          ),
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () {
+                            widget.removeTodo(widget.todo);
+                          },
+                          color: Colors.white,
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          widget.removeTodo(widget.todo);
-                        },
-                        color: Colors.grey,
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         ],

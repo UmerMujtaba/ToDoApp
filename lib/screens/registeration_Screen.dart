@@ -20,18 +20,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.black,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.black,
           leading: const Icon(
             Icons.arrow_back_ios_new_sharp,
             size: 20,
-            color: Colors.black,
+            color: Colors.white,
           ),
           title: const Text(
             'Sign up',
             style: TextStyle(
-                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
         ),
@@ -56,7 +56,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 const Text(
                   'Add profile picture',
                   style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),
@@ -72,7 +72,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: Text(
                               'Name',
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14),
                             ),
@@ -86,7 +86,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           //obscureText: true,
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.grey[300],
+                            fillColor: Colors.white,
                             border: OutlineInputBorder(
                               borderSide: const BorderSide(
                                   color: Colors.white, width: 2.0),
@@ -106,7 +106,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: Text(
                               'Email',
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14),
                             ),
@@ -121,7 +121,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           // obscureText: true,
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.grey[300],
+                            fillColor: Colors.white,
                             border: OutlineInputBorder(
                               borderSide: const BorderSide(
                                   color: Colors.white, width: 2.0),
@@ -145,7 +145,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             child: Text(
                               'Password',
                               style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 14),
                             ),
@@ -159,7 +159,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           obscureText: true,
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: Colors.grey[300],
+                            fillColor: Colors.white,
                             border: OutlineInputBorder(
                               borderSide: const BorderSide(
                                   color: Colors.white, width: 2.0),
