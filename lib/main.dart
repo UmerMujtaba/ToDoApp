@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todoapp/screens/login_Screen.dart';
 import 'package:todoapp/screens/registeration_Screen.dart';
 import 'component/loader.dart';
@@ -34,19 +35,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: '/start',
-      routes: {
-        '/': (context) => const Loading(),
-        '/start': (context) => const StartScreen(),
-        '/register': (context) => const RegistrationScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/main': (context) => MainScreen(todoProvider: todoProvider),
-        '/bar': (context) => const Bar(),
-        //'/drawer': (context) => DrawerApp(title: 'ok',),
-        '/premium': (context) => const Premium(),
-        '/setting': (context) => const Setting(),
-      },
+    return ProviderScope(
+      child: MaterialApp(
+        initialRoute: '/start',
+        routes: {
+          '/': (context) => const Loading(),
+          '/start': (context) => const StartScreen(),
+          '/register': (context) => const RegistrationScreen(),
+          '/login': (context) => const LoginScreen(),
+          '/main': (context) => MainScreen(todoProvider: todoProvider),
+          '/bar': (context) => const Bar(),
+          //'/drawer': (context) => DrawerApp(title: 'ok',),
+          '/premium': (context) => const Premium(),
+          '/setting': (context) => const Setting(),
+        },
+      ),
     );
   }
 }

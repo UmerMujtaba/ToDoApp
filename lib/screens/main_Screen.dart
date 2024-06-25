@@ -139,7 +139,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       drawer: DrawerApp(
         title: 'New',
-        todos: todos,
+        //todos: todos,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent[80],

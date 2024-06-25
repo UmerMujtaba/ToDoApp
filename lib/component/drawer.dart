@@ -1,24 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../model/todo_Class.dart';
 import '../model/todo_Provider.dart';
-import '../services/firebase_service.dart';
+import '../provider/provider_backup_restore.dart';
+import '../services/firebase_Service.dart';
 
-class DrawerApp extends StatefulWidget {
+class DrawerApp extends ConsumerWidget {
   final String title;
-  final List<Todo> todos; // Add todos parameter
+  // final List<Todo> todos; // Add todos parameter
 
-  const DrawerApp({Key? key, required this.title, required this.todos});
+  const DrawerApp({Key? key, required this.title});
 
-  @override
-  State<DrawerApp> createState() => _DrawerAppState();
-}
 
-class _DrawerAppState extends State<DrawerApp> {
-  final FirebaseService firebaseService = FirebaseService();
-  final TodoProvider todoProvider = TodoProvider();
-  List<Todo> todos = <Todo>[];
+  // final FirebaseService firebaseService = FirebaseService();
+  // final TodoProvider todoProvider = TodoProvider();
+  // List<Todo> todos = <Todo>[];
 
   Future<bool> _checkIfLoggedIn() async {
     final user = FirebaseAuth.instance.currentUser;
@@ -64,48 +62,10 @@ class _DrawerAppState extends State<DrawerApp> {
     );
   }
 
-  Future<void> _loadTodos() async {
-    try {
-      List<Todo> loadedTodos = await todoProvider.getAllTodos();
-      setState(() {
-        todos.clear();
-        todos.addAll(loadedTodos);
-      });
-      print('Fetched ${loadedTodos.length} todos: $loadedTodos');
-    } catch (e) {
-      print('Error loading todos: $e');
-    }
-  }
-
-  Future<void> _backupTodos(BuildContext context) async {
-    try {
-      print('Opening database...');
-      await todoProvider.open('sample'); // Open the database
-
-      print('Fetching todos...');
-      await _loadTodos(); // Ensure todos are loaded before backup
-      print('Fetched ${todos.length} todos: $todos');
-
-      print('Backing up todos to Firestore...');
-      await firebaseService.backupTodosToFirestore(todos);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Backup successful.')),
-      );
-
-      print('Local database closed.');
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Backup failed: $e')),
-      );
-      print('Backup failed: $e');
-    } finally {
-      await todoProvider.close(); // Always ensure database is closed
-    }
-  }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todoStateNotifier = ref.watch(todoStateNotifierProvider);
     return SafeArea(
       child: SizedBox(
         width: MediaQuery.of(context).size.width *
@@ -203,7 +163,8 @@ class _DrawerAppState extends State<DrawerApp> {
                         context, 'You need to log in or register first.');
                     _showDialog(context);
                   } else {
-                    await _backupTodos(context);
+                    final todosNotifier = ref.read(todoStateNotifierProvider.notifier);
+                    await todosNotifier.backupTodos(context);
                     Navigator.pop(context);
                   }
                 },
