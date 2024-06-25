@@ -35,19 +35,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/front',
+      initialRoute: '/start',
       routes: {
         '/': (context) => const Loading(),
         '/start': (context) => const StartScreen(),
-        '/main': (context) => MainScreen(todoProvider: todoProvider),
-        '/setting': (context) => const Setting(),
-        '/bar': (context) => const Bar(),
-        '/drawer': (context) => const DrawerApp(
-              title: 'ok',
-            ),
-        '/premium': (context) => const Premium(),
-        '/login': (context) => const LoginScreen(),
         '/register': (context) => const RegistrationScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/main': (context) => MainScreen(todoProvider: todoProvider),
+        '/bar': (context) => const Bar(),
+        //'/drawer': (context) => DrawerApp(title: 'ok',),
+        '/premium': (context) => const Premium(),
+        '/setting': (context) => const Setting(),
       },
     );
   }

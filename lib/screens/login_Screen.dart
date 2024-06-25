@@ -23,6 +23,20 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          leading: const Icon(
+            Icons.arrow_back_ios_new_sharp,
+            size: 20,
+            color: Colors.black,
+          ),
+          title: const Text(
+            'Sign in',
+            style: TextStyle(
+                color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+        ),
         backgroundColor: Colors.white,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -44,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(
               width: 300,
               child: TextField(
+                keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.grey[300],
@@ -103,8 +118,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 44.0,
                 // padding: const EdgeInsets.fromLTRB(120, 10, 120, 10),
                 onPressed: () async {
-                  Navigator.pushNamed(context, '/');
-                  // Simulate a delay for loading
                   Future.delayed(const Duration(seconds: 1), () async {
                     setState(() {
                       showSpinner = true;
@@ -113,10 +126,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       final user = await _auth.signInWithEmailAndPassword(
                           email: email, password: password);
                       if (user != null) {
-                        Navigator.pushNamed(context, '/first');
+                        Navigator.pushNamed(context, '/main');
                       }
                     } catch (e) {
-                      print(e);
+                      // Show a dialog with an error message
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Error'),
+                            content:
+                                Text('Invalid credentials, please try again.'),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     }
                     setState(() {
                       showSpinner = false;
