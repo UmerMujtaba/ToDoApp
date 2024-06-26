@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:uuid/uuid.dart';
 import 'dart:io';
 import '/model/todo_Class.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,13 +7,10 @@ import '/model/todo_Provider.dart';
 
 class DisplayAlertDialog extends StatefulWidget {
   final Todo? todo;
-  final TodoProvider todoProvider;
   final VoidCallback onTodoUpdated;
 
-  // required this.onTodoEdit
   const DisplayAlertDialog({
     Key? key,
-    required this.todoProvider,
     this.todo,
     required this.onTodoUpdated,
   }) : super(key: key);
@@ -24,13 +21,11 @@ class DisplayAlertDialog extends StatefulWidget {
 
 class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
   late TodoProvider _todoProvider;
-  final List<Todo> todos = <Todo>[];
   final TextEditingController _textFieldController = TextEditingController();
   final TextEditingController _textFieldController2 = TextEditingController();
   final TextEditingController _textFieldController3 = TextEditingController();
   String _selectedPriority = 'Low';
   Color _selectedColor = Colors.red[300]!;
-  int _selectedindex = 0;
 
   @override
   void initState() {
@@ -43,7 +38,8 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
       _selectedPriority = widget.todo!.color;
       _selectedColor = _getPriorityColor(widget.todo!.color);
     }
-    _todoProvider = widget.todoProvider;
+
+    _todoProvider = TodoProvider();
     _todoProvider.open('sample').then((_) {
       print('Database opened');
     }).catchError((e) {
@@ -59,11 +55,11 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
       todo.description = description;
       todo.text = text;
       todo.color = color;
-      var result = await _todoProvider.update(todo);
-      widget.onTodoUpdated();
+      await _todoProvider.update(todo);
     } else {
       // Add new todo
       Todo newTodo = Todo(
+        uid:const Uuid().v4(),
         title: title,
         description: description,
         completed: false,
@@ -72,19 +68,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
       );
       await _todoProvider.insert(newTodo);
     }
-  }
-
-  Future<void> _loadTodos() async {
-    print('load todos of first screen dialog');
-    try {
-      List<Todo> loadedTodos = await _todoProvider.getAllTodos();
-      setState(() {
-        //todos.clear();
-        todos.addAll(loadedTodos);
-      });
-    } catch (e) {
-      print('Error loading todos: $e');
-    }
+    widget.onTodoUpdated();
   }
 
   Color _getPriorityColor(String color) {
@@ -103,21 +87,18 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
   @override
   void dispose() {
     // Dispose of the controllers to free up resources
-    print('i m dispose of show-dialog');
+    print('Disposing of DisplayAlertDialog');
     _textFieldController.dispose();
     _textFieldController2.dispose();
     _textFieldController3.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    TodoProvider todoProvider = TodoProvider();
     return SizedBox(
       width: 360.0,
       height: 400.0,
-
       child: AlertDialog(
         backgroundColor: Colors.grey,
         title: Text(
@@ -137,7 +118,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Title',
-                    style: TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.bold,),
+                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -147,7 +128,8 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 child: TextField(
                   controller: _textFieldController,
                   decoration: const InputDecoration(
-                      hintText: 'Enter Title'), //act as a placeholder
+                    hintText: 'Enter Title',
+                  ),
                   autofocus: true,
                 ),
               ),
@@ -156,7 +138,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Description',
-                    style: TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.bold,),
+                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -166,7 +148,8 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 child: TextField(
                   controller: _textFieldController2,
                   decoration: const InputDecoration(
-                      hintText: 'Enter Description'), //act as a placeholder
+                    hintText: 'Enter Description',
+                  ),
                   autofocus: true,
                 ),
               ),
@@ -175,7 +158,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Priorities',
-                    style: TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.bold,),
+                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -187,23 +170,17 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                   children: <Widget>[
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: _selectedPriority == 'High'
-                              ? Colors.red[400]
-                              : Colors.grey,
-                          elevation: _selectedPriority == 'High' ? 20 : 5,
-                          minimumSize: _selectedPriority == 'High'
-                              ? const Size.square(45)
-                              : const Size.square(35),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)))),
+                        backgroundColor: _selectedPriority == 'High' ? Colors.red[400] : Colors.grey,
+                        elevation: _selectedPriority == 'High' ? 20 : 5,
+                        minimumSize: _selectedPriority == 'High' ? const Size.square(45) : const Size.square(35),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                      ),
                       onPressed: () {
                         setState(() {
                           _selectedPriority = 'High';
-                          print(_selectedPriority);
                           _textFieldController3.text = _selectedPriority;
-
-                          // _selectedColor = Colors.green!;
                         });
                       },
                       child: const SizedBox(
@@ -222,21 +199,17 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                       onPressed: () {
                         setState(() {
                           _selectedPriority = 'Medium';
-                          print(_selectedPriority);
                           _textFieldController3.text = _selectedPriority;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: _selectedPriority == 'Medium'
-                              ? Colors.orange[300]
-                              : Colors.grey,
-                          elevation: _selectedPriority == 'Medium' ? 20 : 5,
-                          minimumSize: _selectedPriority == 'Medium'
-                              ? const Size.square(45)
-                              : const Size.square(35),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)))),
+                        backgroundColor: _selectedPriority == 'Medium' ? Colors.orange[300] : Colors.grey,
+                        elevation: _selectedPriority == 'Medium' ? 20 : 5,
+                        minimumSize: _selectedPriority == 'Medium' ? const Size.square(45) : const Size.square(35),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                      ),
                       child: const SizedBox(
                         width: 35,
                         child: Text(
@@ -253,21 +226,17 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                       onPressed: () {
                         setState(() {
                           _selectedPriority = 'Low';
-                          print(_selectedPriority);
                           _textFieldController3.text = _selectedPriority;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: _selectedPriority == 'Low'
-                              ? Colors.blue[300]
-                              : Colors.grey,
-                          elevation: _selectedPriority == 'Low' ? 20 : 5,
-                          minimumSize: _selectedPriority == 'Low'
-                              ? const Size.square(45)
-                              : const Size.square(35),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)))),
+                        backgroundColor: _selectedPriority == 'Low' ? Colors.blue[300] : Colors.grey,
+                        elevation: _selectedPriority == 'Low' ? 20 : 5,
+                        minimumSize: _selectedPriority == 'Low' ? const Size.square(45) : const Size.square(35),
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                        ),
+                      ),
                       child: const SizedBox(
                         width: 20,
                         child: Text(
@@ -287,7 +256,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Attachment',
-                    style: TextStyle(color: Colors.black, fontSize: 14,fontWeight: FontWeight.bold,),
+                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -298,9 +267,9 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                     height: 40,
                     width: 40,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        border:
-                            Border.all(style: BorderStyle.solid, width: 1.0)),
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(style: BorderStyle.solid, width: 1.0),
+                    ),
                     child: IconButton(
                       icon: const Icon(Icons.add),
                       color: Colors.black,
@@ -331,8 +300,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 String text = _textFieldController3.text;
                 String color = getColorForPriority(_selectedPriority);
 
-                await _addOrUpdateTodoItem(
-                    widget.todo, title, description, text, color);
+                await _addOrUpdateTodoItem(widget.todo, title, description, text, color);
 
                 widget.onTodoUpdated();
 
@@ -340,7 +308,10 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
               },
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: Text(widget.todo == null ? 'Add Todo' : 'Update Todo',style: TextStyle(color: Colors.white),),
+                child: Text(
+                  widget.todo == null ? 'Add Todo' : 'Update Todo',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ),
@@ -351,7 +322,6 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
 
   void _showPicker({required BuildContext context}) {
     showModalBottomSheet(
-
       context: context,
       builder: (BuildContext context) {
         return SafeArea(
@@ -396,9 +366,10 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
   String getColorForPriority(String selectedPriority) {
     if (selectedPriority == "High") {
       return "Red";
-    } else if (selectedPriority.contains("High"))
+    } else if (selectedPriority == "Medium") {
       return "Orange";
-    else
+    } else {
       return "Blue";
+    }
   }
 }

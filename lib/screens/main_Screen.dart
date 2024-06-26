@@ -1,34 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import '/model/todo_Class.dart';
-import '/component/drawer.dart';
-import '/component/bottom_Bar.dart';
-import '/model/todo_Provider.dart';
-import 'firstscreen/returning_List.dart';
-import 'firstscreen/show_Dialog.dart';
-import 'firstscreen/category.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todoapp/model/todo_Class.dart';
+import 'package:todoapp/provider/provider_backup_restore.dart';
+import 'package:todoapp/screens/firstscreen/returning_List.dart';
+import 'package:todoapp/screens/firstscreen/show_Dialog.dart';
+import 'package:todoapp/screens/firstscreen/category.dart'; // Assuming this is where TodoProvider is defined
+import 'package:todoapp/component/drawer.dart';
+import 'package:todoapp/component/bottom_Bar.dart';
 
-class MainScreen extends StatefulWidget {
+import '../model/todo_Provider.dart';
+
+class MainScreen extends ConsumerStatefulWidget {
   final TodoProvider todoProvider;
 
-  const MainScreen({super.key, required this.todoProvider});
+  const MainScreen({Key? key, required this.todoProvider}) : super(key: key);
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   late TodoProvider _todoProvider;
   List<Todo> todos = <Todo>[];
-  Todo? _editingTodo;
+  bool _isDatabaseInitialized = false;
 
   @override
   void initState() {
     super.initState();
     _todoProvider = widget.todoProvider;
+
     openDatabase();
   }
-
   Future<void> _loadTodos() async {
     try {
       List<Todo> loadedTodos = await _todoProvider.getAllTodos();
@@ -41,27 +43,59 @@ class _MainScreenState extends State<MainScreen> {
       print('Error loading todos: $e');
     }
   }
+  Future<void> _restoreTodos() async {
+    try {
+      await ref.read(todoStateNotifierProvider.notifier).restoreTodos(context);
+    } catch (e) {
+      print('Error restoring todos: $e');
+    }
+  }
+
+  // Future<void> _loadTodos() async {
+  //   try {
+  //
+  //     final result=await ref.read(todoStateNotifierProvider.notifier).loadTodos();
+  //     print("result-----");
+  //   } catch (e) {
+  //     print('Error loading todos: $e');
+  //     // Handle error as needed
+  //   }
+  // }
 
   Future<void> openDatabase() async {
     try {
       await _todoProvider
           .open('sample'); // Open the database with the desired name
-      print('Database opened successfully');
+      setState(() {
+        _isDatabaseInitialized = true;
+      });
       await _loadTodos();
+      print('Database opened successfully from main screen');
     } catch (e) {
       print('Error opening database: $e');
+      // Handle error as needed
     }
   }
 
   @override
   void dispose() {
-    _todoProvider.close();
+    //_todoProvider.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    TodoProvider todoProvider = TodoProvider();
+    if (!_isDatabaseInitialized) {
+      // Handle case where database is not yet initialized
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    final todos = ref.watch(todoStateNotifierProvider);
+
     return Scaffold(
       backgroundColor: Colors.black45,
       body: SafeArea(
@@ -129,17 +163,13 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              ReturnList(
-                todoProvider: _todoProvider,
-                todos: todos,
-              ),
+              ReturnList(todos: todos,todoProvider: _todoProvider,),
             ],
           ),
         ),
       ),
-      drawer: DrawerApp(
+      drawer: const DrawerApp(
         title: 'New',
-        //todos: todos,
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.deepPurpleAccent[80],
@@ -148,15 +178,8 @@ class _MainScreenState extends State<MainScreen> {
             context: context,
             builder: (BuildContext context) {
               return DisplayAlertDialog(
-                todoProvider: _todoProvider,
                 todo: null,
-                onTodoUpdated: () {
-                  setState(
-                    () {
-                      _loadTodos(); //used to load todos after adding or updating
-                    },
-                  );
-                },
+                onTodoUpdated: _loadTodos,
               );
             },
           );

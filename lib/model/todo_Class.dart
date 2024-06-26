@@ -1,5 +1,6 @@
 class Todo {
   int? id;
+  String? uid;
   String title;
   String description;
   bool completed;
@@ -8,6 +9,7 @@ class Todo {
 
   Todo({
     this.id,
+    this.uid,
     required this.title,
     required this.description,
     required this.completed,
@@ -21,6 +23,7 @@ class Todo {
       columndescription: description,
       columnCompleted: completed ? 1 : 0,
       columnText: text,
+      coulmnUid: uid,
       columnColor: color, // Store color as an integer
     };
     if (id != null) {
@@ -33,6 +36,7 @@ class Todo {
     return Todo(
       id: map['id'] as int?,
       // Ensure 'id' is cast to int?
+      uid:map['uid'] as String,
       title: map['title'] as String,
       description: map['description'] as String,
       completed: map['completed'] == 1,
@@ -49,3 +53,4 @@ const String columndescription = 'description';
 const String columnCompleted = 'completed';
 const String columnText = 'text';
 const String columnColor = 'color'; // Change to String for column name
+const String coulmnUid = 'uid'; // Change to String for column name

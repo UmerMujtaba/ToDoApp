@@ -6,6 +6,7 @@ class Premium extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Navigator.pop(context);
     return SafeArea(
       child: Scaffold(
         body: Container(

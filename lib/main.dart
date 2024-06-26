@@ -29,10 +29,15 @@ void main() async {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  final TodoProvider todoProvider =
-      TodoProvider(); // Create an instance of TodoProvider
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
+class _MyAppState extends State<MyApp> {
+  final TodoProvider todoProvider =
+      TodoProvider();
+ // Create an instance of TodoProvider
   @override
   Widget build(BuildContext context) {
     return ProviderScope(
