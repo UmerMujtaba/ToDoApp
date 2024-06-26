@@ -17,4 +17,25 @@ class FirebaseService {
       print('Error backing up todos: $e'); // Check for any errors
     }
   }
+
+  // Future<List<Todo>> restoreTodosFromFirestore() async {
+  //   try {
+  //     QuerySnapshot snapshot = await _firestore.collection('todos').get();
+  //     List<Todo> todos = snapshot.docs
+  //         .map((doc) => Todo(
+  //
+  //       title: doc['title'],
+  //       description: doc['description'],
+  //       completed: doc['completed'],
+  //       text: doc['text'],
+  //       color: doc['color'],
+  //     ))
+  //         .toList();
+  //     return todos;
+  //   } catch (e) {
+  //     print('Error restoring todos from Firestore: $e');
+  //     return [];
+  //   }
+  // }
+
 }

@@ -190,7 +190,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           showSpinner = true;
                         });
 
-                        Navigator.pushNamed(context, '/login');
+                        Navigator.pushReplacementNamed(context, '/login');
                       },
                     ),
                     SizedBox(width: 20),
@@ -206,7 +206,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               await _auth.createUserWithEmailAndPassword(
                                   email: email, password: password);
                           if (newUser != null) {
-                            Navigator.pushNamed(context, '/login');
+                            Navigator.pushReplacementNamed(context, '/login');
                           }
                         } catch (e) {
                           print(e);

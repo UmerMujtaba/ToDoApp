@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       final user = await _auth.signInWithEmailAndPassword(
                           email: email, password: password);
                       if (user != null) {
-                        Navigator.pushNamed(context, '/main');
+                        Navigator.pushReplacementNamed(context, '/main');
                       }
                     } catch (e) {
                       // Show a dialog with an error message

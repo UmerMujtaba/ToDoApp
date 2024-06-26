@@ -1,50 +1,36 @@
 import 'package:flutter/material.dart';
+
 import '/model/todo_Class.dart';
 import 'todo_Item.dart';
-import '/model/todo_Provider.dart';
 import 'show_Dialog.dart';
+import '/model/todo_Provider.dart';
 
 class ReturnList extends StatefulWidget {
-  final TodoProvider todoProvider;
   final List<Todo> todos;
-
-  const ReturnList({Key? key, required this.todoProvider, required this.todos})
-      : super(key: key);
+final TodoProvider todoProvider;
+  const ReturnList({Key? key, required this.todos, required this.todoProvider}) : super(key: key);
 
   @override
   State<ReturnList> createState() => _ReturnListState();
 }
 
 class _ReturnListState extends State<ReturnList> {
+  late List<Todo> _todos;
   late TodoProvider _todoProvider;
-  late final List<Todo> _todos;
-
-  Todo? _editingTodo;
-
   @override
   void initState() {
     super.initState();
-    _todoProvider = widget.todoProvider;
     _todos = widget.todos;
+    _todoProvider = widget.todoProvider;
+    _loadTodos();
   }
-
-  Future<void> openDatabase() async {
-    try {
-      await _todoProvider
-          .open('sample'); // Open the database with the desired name
-      print('Database opened successfully');
-      await _loadTodos();
-    } catch (e) {
-      print('Error opening database: $e');
-    }
-  }
-
   Future<void> _loadTodos() async {
     print('load todos of return list screen ');
     try {
       List<Todo> loadedTodos = await _todoProvider.getAllTodos();
 
       setState(() {
+        print("okokokokok-------${_todos}");
         _todos.clear();
         _todos.addAll(loadedTodos);
       });
@@ -52,27 +38,21 @@ class _ReturnListState extends State<ReturnList> {
       print('Error loading todos: $e');
     }
   }
-
   void handleTodoChange(Todo todo) {
     setState(() {
       todo.completed = !todo.completed;
     });
   }
 
-  Future<void> _deleteTodoItem(Todo todo) async {
-    try {
-      await _todoProvider.delete(todo.id!); // Ensure id is not null
-      setState(() {
-        _todos.removeWhere((element) => element.id == todo.id);
-      });
-    } catch (e) {
-      print('Error deleting todo item: $e');
-    }
+  void _deleteTodoItem(Todo todo) {
+    setState(() {
+      _todos.removeWhere((element) => element.id == todo.id);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    TodoProvider todoProvider = TodoProvider();
+    print(_todos);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
@@ -83,20 +63,17 @@ class _ReturnListState extends State<ReturnList> {
         itemBuilder: (context, index) {
           return TodoItem(
             key: UniqueKey(),
-            // Add a unique key for each TodoItem
             todo: _todos[index],
             onTodoChanged: handleTodoChange,
             removeTodo: (Todo todo) {
-              // Modify the signature to accept a Todo parameter
-              _deleteTodoItem(
-                  todo); // Pass the todo item to the _deleteTodoItem function
+              _deleteTodoItem(todo);
             },
             onTodoEdit: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return DisplayAlertDialog(
-                    todoProvider: _todoProvider,
+
                     todo: _todos[index],
                     onTodoUpdated: _loadTodos,
                   );

@@ -155,26 +155,36 @@ class DrawerApp extends ConsumerWidget {
               ListTile(
                 leading: const Icon(Icons.backup_outlined,
                     size: 30, color: Colors.blueAccent),
-                title: const Text('Back up',style: TextStyle(fontSize: 16, color: Colors.white),),
+                title: const Text(
+                  'Back up',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
                 onTap: () async {
                   bool isLoggedIn = await _checkIfLoggedIn();
                   if (!isLoggedIn) {
                     _showSnackbar(
                         context, 'You need to log in or register first.');
-                    _showDialog(context);
+                    // Handle login or registration flow
                   } else {
-                    final todosNotifier = ref.read(todoStateNotifierProvider.notifier);
-                    await todosNotifier.backupTodos(context);
-                    Navigator.pop(context);
+                    await ref
+                        .read(todoStateNotifierProvider.notifier)
+                        .backupTodos(context);
+                    Navigator.pop(context); // Close the drawer after backup
                   }
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.restore,
                     size: 30, color: Colors.blueAccent),
-                title: const Text('Restore',style: TextStyle(fontSize: 16, color: Colors.white),),
-                onTap: () {
-                  Navigator.pushNamed(context, '/login');
+                title: const Text(
+                  'Restore',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+                onTap: () async {
+                  await ref
+                      .read(todoStateNotifierProvider.notifier)
+                      .restoreTodos(context);
+                  Navigator.pop(context); // Close the drawer after restore
                 },
               ),
               ListTile(
@@ -183,6 +193,7 @@ class DrawerApp extends ConsumerWidget {
                 title: const Text('Premium',style: TextStyle(fontSize: 16, color: Colors.white),),
                 onTap: () {
                   Navigator.pushNamed(context, '/premium');
+                 // Navigator.pop(context); // Close
                 },
               ),
               ListTile(
@@ -191,6 +202,7 @@ class DrawerApp extends ConsumerWidget {
                 title: const Text('Setting',style: TextStyle(fontSize: 16, color: Colors.white),),
                 onTap: () {
                   Navigator.pushNamed(context, '/setting');
+                  //Navigator.pop(context); // Close
                 },
               ),
             ],
@@ -200,3 +212,5 @@ class DrawerApp extends ConsumerWidget {
     );
   }
 }
+
+
