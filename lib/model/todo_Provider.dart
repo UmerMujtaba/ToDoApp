@@ -72,20 +72,8 @@ class TodoProvider {
   }
 
   Future<int> delete(int id) async {
-    await _checkDbInitialized();
-    int result = await db.delete('todo', where: 'id = ?', whereArgs: [id]);
-
-    // Delete from Firestore
-    var snapshots = await firestore
-        .collection('todos')
-        .where('id', isEqualTo: id)
-        .get();
-    for (var doc in snapshots.docs) {
-      await firestore.collection('todos').doc(doc.id).delete();
-    }
-    return result;
+    return await db.delete('todo', where: 'id = ?', whereArgs: [id]);
   }
-
   Future<void> close() async {
     await _checkDbInitialized();
     await db.close();

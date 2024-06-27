@@ -15,8 +15,10 @@ final TodoProvider todoProvider;
 }
 
 class _ReturnListState extends State<ReturnList> {
+
   late List<Todo> _todos;
   late TodoProvider _todoProvider;
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +26,8 @@ class _ReturnListState extends State<ReturnList> {
     _todoProvider = widget.todoProvider;
     _loadTodos();
   }
+
+  //load todos
   Future<void> _loadTodos() async {
     print('load todos of return list screen ');
     try {
@@ -38,21 +42,32 @@ class _ReturnListState extends State<ReturnList> {
       print('Error loading todos: $e');
     }
   }
+
+
+  //handle todo change
   void handleTodoChange(Todo todo) {
     setState(() {
       todo.completed = !todo.completed;
     });
   }
 
-  void _deleteTodoItem(Todo todo) {
-    setState(() {
-      _todos.removeWhere((element) => element.id == todo.id);
-    });
+
+  //delete todo item
+  Future<void> _deleteTodoItem(Todo todo) async {
+    try {
+      await _todoProvider.delete(todo.id!); // Ensure id is not null
+      setState(() {
+        _todos.removeWhere((element) => element.id == todo.id);
+      });
+    } catch (e) {
+      print('Error deleting todo item: $e');
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
-    print(_todos);
+   // print(_todos);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView.builder(
@@ -73,7 +88,6 @@ class _ReturnListState extends State<ReturnList> {
                 context: context,
                 builder: (BuildContext context) {
                   return DisplayAlertDialog(
-
                     todo: _todos[index],
                     onTodoUpdated: _loadTodos,
                   );

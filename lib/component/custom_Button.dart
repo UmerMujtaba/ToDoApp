@@ -23,7 +23,7 @@ class CustomButton extends StatelessWidget {
         shape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(10),
         gradient: const LinearGradient(
-          colors: [Colors.purpleAccent, Colors.blue],
+          colors: [Colors.blueAccent, Colors.blueGrey],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         ),

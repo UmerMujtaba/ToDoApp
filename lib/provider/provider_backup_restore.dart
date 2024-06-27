@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:todoapp/model/todo_Class.dart';
-import '../model/todo_provider.dart'; // Assuming this is where TodoProvider is defined
-import '../services/firebase_service.dart'; // Assuming this is where FirebaseService is defined
+import '../model/todo_provider.dart';
+import '../services/firebase_service.dart';
 
 // Define the Riverpod provider for TodoStateNotifier
 final todoStateNotifierProvider =

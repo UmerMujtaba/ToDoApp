@@ -31,6 +31,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
     openDatabase();
   }
+
   Future<void> _loadTodos() async {
     try {
       List<Todo> loadedTodos = await _todoProvider.getAllTodos();
@@ -43,6 +44,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       print('Error loading todos: $e');
     }
   }
+
   Future<void> _restoreTodos() async {
     try {
       await ref.read(todoStateNotifierProvider.notifier).restoreTodos(context);
@@ -95,8 +97,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
 
     final todos = ref.watch(todoStateNotifierProvider);
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final Orientation orientation = MediaQuery.of(context).orientation;
 
     return Scaffold(
+      
       backgroundColor: Colors.black45,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -163,7 +169,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              ReturnList(todos: todos,todoProvider: _todoProvider,),
+              ReturnList(
+                todos: todos,
+                todoProvider: _todoProvider,
+              ),
             ],
           ),
         ),
