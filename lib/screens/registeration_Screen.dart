@@ -13,8 +13,10 @@ class RegistrationScreen extends StatefulWidget {
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   late String email;
-  late String password;
+  String password = '';
   bool showSpinner = false;
+
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -24,21 +26,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset : false,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.black,
-          leading: const Icon(
-            Icons.arrow_back_ios_new_sharp,
-            size: 20,
-            color: Colors.white,
-          ),
+
           title: const Text(
             'Sign up',
             style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
+          centerTitle: true,
         ),
         body: ModalProgressHUD(
           inAsyncCall: showSpinner,
@@ -48,7 +47,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 SizedBox(height: 20),
                 Container(
                   //color: Colors.red,
-                  height: MediaQuery.of(context).size.height * 0.2,
+                  height: screenHeight * 0.2,
                   child: Center(
                     child: CircleAvatar(
                       backgroundColor: Colors.grey[600],
@@ -70,7 +69,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       fontWeight: FontWeight.bold),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.4,
+                  height: screenHeight * 0.4,
                   child: Center(
                     child: Column(
                       children: <Widget>[
@@ -95,6 +94,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               horizontal: 30, vertical: 5),
                           child: TextField(
                             decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.text_fields, size: 24),
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
@@ -132,6 +132,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
+                              prefixIcon: Icon(Icons.email, size: 24),
                               border: OutlineInputBorder(
                                 borderSide: const BorderSide(
                                     color: Colors.white, width: 2.0),
@@ -166,8 +167,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 30, vertical: 5),
                           child: TextField(
-                            obscureText: true,
+                            obscureText: _obscureText,
                             decoration: InputDecoration(
+                              prefixIcon: Icon(Icons.lock, size: 24),
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
@@ -176,6 +178,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 borderRadius: BorderRadius.circular(10.0),
                               ),
                               hintText: 'Enter Password',
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscureText ? Icons.visibility : Icons.visibility_off,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _obscureText = !_obscureText;
+                                  });
+                                },
+                              ),
                             ),
                             onChanged: (value) {
                               password = value;
@@ -189,9 +201,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 1,
-                  height: MediaQuery.of(context).size.height * 0.1,
+                SizedBox(
+                  width: screenWidth * 1,
+                  height: screenHeight * 0.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

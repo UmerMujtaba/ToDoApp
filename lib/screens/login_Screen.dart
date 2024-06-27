@@ -1,6 +1,6 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../component/custom_Button.dart';
 
@@ -15,8 +15,10 @@ final _auth = FirebaseAuth.instance;
 
 class _LoginScreenState extends State<LoginScreen> {
   late String email;
-  late String password;
+  String password = '';
   bool showSpinner = false;
+
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -26,26 +28,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset : false,
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.black,
-          leading: const Icon(
-            Icons.arrow_back_ios_new_sharp,
-            size: 20,
-            color: Colors.white,
-          ),
+
           title: const Text(
             'Sign in',
             style: TextStyle(
-                color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
+          centerTitle: true,
         ),
         backgroundColor: Colors.black,
-        body: Container(
-         // color: Colors.red,
-          height: MediaQuery.of(context).size.height * 0.9,
-          width: MediaQuery.of(context).size.width * 1,
+        body: SizedBox(
+          // color: Colors.red,
+          height: screenHeight * 0.9,
+          width: screenWidth * 1,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -70,6 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
+                      prefixIcon: Icon(Icons.email, size: 24),
                       border: OutlineInputBorder(
                         borderSide:
                             const BorderSide(color: Colors.white, width: 2.0),
@@ -100,10 +100,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               SizedBox(
-               width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.8,
                 child: TextField(
-                  obscureText: true,
+                  obscureText: _obscureText,
                   decoration: InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
@@ -112,6 +113,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     hintText: 'Password',
+                    prefixIcon: Icon(Icons.lock_rounded, size: 24),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscureText ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                    ),
                   ),
                   style: const TextStyle(color: Colors.black, fontSize: 14),
                   onChanged: (value) {
@@ -134,6 +146,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         final user = await _auth.signInWithEmailAndPassword(
                             email: email, password: password);
                         if (user != null) {
+                          final SharedPreferences sharedpreferences =
+                              await SharedPreferences.getInstance();
+                          sharedpreferences.setString('email', email);
                           Navigator.pushReplacementNamed(context, '/main');
                         }
                       } catch (e) {
@@ -143,8 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               title: const Text('Error'),
-                              content:
-                                  const Text('Enter credentials and try again.'),
+                              content: const Text(
+                                  'Enter credentials and try again.'),
                               actions: <Widget>[
                                 TextButton(
                                   child: const Text('OK'),
@@ -161,6 +176,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         showSpinner = false;
                       });
                     });
+
+                    //Navigator.pushNamed(context, '/main');
                   }),
               const SizedBox(height: 15),
               Row(

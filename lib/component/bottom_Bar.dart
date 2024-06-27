@@ -36,9 +36,8 @@ class _BarState extends State<Bar> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white
-                    ),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.white),
                     onPressed: () async {
                       DateTime? pickedDate = await showDatePicker(
                         context: context,
@@ -81,10 +80,7 @@ class _BarState extends State<Bar> {
       Navigator.pushNamed(context, '/drawer');
     }
     if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MainScreen(todoProvider: todoProvider)),
-      );
+      Navigator.pushReplacementNamed(context, '/main');
     }
     if (index == 2) {
       await calendar();
@@ -100,7 +96,7 @@ class _BarState extends State<Bar> {
     const StartScreen(),
     const Premium(),
     const Setting(),
-    // DrawerApp(title: 'ok'),
+    DrawerApp(title: 'ok'),
   ];
 
   @override
@@ -114,7 +110,8 @@ class _BarState extends State<Bar> {
           elevation: 6,
           // Add elevation
           iconSize: 24,
-          selectedIconTheme: const IconThemeData(color: Colors.blueAccent, size: 28),
+          selectedIconTheme:
+              const IconThemeData(color: Colors.blueAccent, size: 28),
           selectedItemColor: Colors.blueAccent,
           unselectedIconTheme: const IconThemeData(color: Colors.white),
           unselectedItemColor: Colors.deepOrangeAccent,

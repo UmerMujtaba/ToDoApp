@@ -28,7 +28,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   void initState() {
     super.initState();
     _todoProvider = widget.todoProvider;
-
+_loadTodos();
     openDatabase();
   }
 

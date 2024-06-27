@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/todo_Class.dart';
 import '../model/todo_Provider.dart';
@@ -203,6 +204,16 @@ class DrawerApp extends ConsumerWidget {
                 onTap: () {
                   Navigator.pushNamed(context, '/setting');
                   //Navigator.pop(context); // Close
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout,
+                    size: 30, color: Colors.blueAccent),
+                title: const Text('Log Out',style: TextStyle(fontSize: 16, color: Colors.white),),
+                onTap: () async {
+                  final SharedPreferences sharedpreferences = await SharedPreferences.getInstance();
+                  sharedpreferences.remove('email');
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
             ],
