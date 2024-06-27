@@ -18,8 +18,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final Orientation orientation = MediaQuery.of(context).orientation;
+
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset : false,
         backgroundColor: Colors.black,
         appBar: AppBar(
           backgroundColor: Colors.black,
@@ -41,14 +46,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             child: Column(
               children: <Widget>[
                 SizedBox(height: 20),
-                Center(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.grey[600],
-                    maxRadius: 60,
-                    child: const Icon(
-                      Icons.person_rounded,
-                      size: 90,
-                      color: Colors.blue,
+                Container(
+                  //color: Colors.red,
+                  height: MediaQuery.of(context).size.height * 0.2,
+                  child: Center(
+                    child: CircleAvatar(
+                      backgroundColor: Colors.grey[600],
+                      maxRadius: 60,
+                      child: const Icon(
+                        Icons.person_rounded,
+                        size: 90,
+                        color: Colors.blue,
+                      ),
                     ),
                   ),
                 ),
@@ -60,181 +69,186 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
                 ),
-                Center(
-                  child: Column(
-                    children: <Widget>[
-                      const SizedBox(height: 20),
-                      const SizedBox(height: 15),
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(35, 0, 0, 5),
-                            child: Text(
-                              'Name',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        const SizedBox(height: 20),
+                        const SizedBox(height: 15),
+                        const Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(35, 0, 0, 5),
+                              child: Text(
+                                'Name',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 300,
-                        height: 45,
-                        child: TextField(
-                          //obscureText: true,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            hintText: 'Enter Name',
-                          ),
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 14),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 15),
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(35, 0, 0, 5),
-                            child: Text(
-                              'Email',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 5),
+                          child: TextField(
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 2.0),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              hintText: 'Enter Name',
                             ),
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 14),
                           ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 300,
-                        height: 45,
-                        child: TextField(
-                          keyboardType: TextInputType.emailAddress,
-                          // obscureText: true,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            hintText: 'Enter Email',
-                          ),
-                          onChanged: (value) {
-                            email = value;
-                            //Do something with the user input.
-                          },
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 14),
                         ),
-                      ),
-                      const SizedBox(height: 15),
-                      const Row(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.fromLTRB(35, 0, 0, 5),
-                            child: Text(
-                              'Password',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 14),
+
+                        const Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                              child: Text(
+                                'Email',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: 300,
-                        height: 45,
-                        child: TextField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.white, width: 2.0),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            hintText: 'Enter Password',
-                          ),
-                          onChanged: (value) {
-                            password = value;
-                            //Do something with the user input.
-                          },
-                          style: const TextStyle(
-                              color: Colors.black, fontSize: 14),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 30),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 5),
+                          child: TextField(
+                            keyboardType: TextInputType.emailAddress,
+                            // obscureText: true,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 2.0),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              hintText: 'Enter Email',
+                            ),
+                            onChanged: (value) {
+                              email = value;
+                              //Do something with the user input.
+                            },
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 14),
+                          ),
+                        ),
+                        // const SizedBox(height: 15),
+                        const Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                              child: Text(
+                                'Password',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 30, vertical: 5),
+                          child: TextField(
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.white,
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                    color: Colors.white, width: 2.0),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              hintText: 'Enter Password',
+                            ),
+                            onChanged: (value) {
+                              password = value;
+                              //Do something with the user input.
+                            },
+                            style: const TextStyle(
+                                color: Colors.black, fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomButton(
-                      text: 'LOGIN',
-                      height: 44.0,
-                      onPressed: () async {
-                        setState(() {
-                          showSpinner = true;
-                        });
+                Container(
+                  width: MediaQuery.of(context).size.width * 1,
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomButton(
+                        text: 'LOGIN',
+                        height: 44.0,
+                        onPressed: () async {
+                          setState(() {
+                            showSpinner = true;
+                          });
 
-                        Navigator.pushReplacementNamed(context, '/login');
-                      },
-                    ),
-                    SizedBox(width: 20),
-                    CustomButton(
-                      text: 'REGISTER',
-                      height: 44.0,
-                      onPressed: () async {
-                        setState(() {
-                          showSpinner = true;
-                        });
-                        try {
-                          final newUser =
-                              await _auth.createUserWithEmailAndPassword(
-                                  email: email, password: password);
-                          if (newUser != null) {
-                            Navigator.pushReplacementNamed(context, '/login');
+                          Navigator.pushReplacementNamed(context, '/login');
+                        },
+                      ),
+                      SizedBox(width: 20),
+                      CustomButton(
+                        text: 'REGISTER',
+                        height: 44.0,
+                        onPressed: () async {
+                          setState(() {
+                            showSpinner = true;
+                          });
+                          try {
+                            final newUser =
+                                await _auth.createUserWithEmailAndPassword(
+                                    email: email, password: password);
+                            if (newUser != null) {
+                              Navigator.pushReplacementNamed(context, '/login');
+                            }
+                          } catch (e) {
+                            print(e);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Error'),
+                                  content: const Text(
+                                      'Enter Credentials, please try again.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: const Text('OK'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           }
-                        } catch (e) {
-                          print(e);
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Error'),
-                                content: const Text(
-                                    'Enter Credentials, please try again.'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                        setState(() {
-                          showSpinner = false;
-                        });
-                      },
-                    ),
-                  ],
+                          setState(() {
+                            showSpinner = false;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),

@@ -81,7 +81,10 @@ class _BarState extends State<Bar> {
       Navigator.pushNamed(context, '/drawer');
     }
     if (index == 1) {
-      Navigator.restorablePushReplacementNamed(context, '/main');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MainScreen(todoProvider: todoProvider)),
+      );
     }
     if (index == 2) {
       await calendar();

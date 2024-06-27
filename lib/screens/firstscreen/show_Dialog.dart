@@ -26,11 +26,11 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
   final TextEditingController _textFieldController3 = TextEditingController();
   String _selectedPriority = 'Low';
   Color _selectedColor = Colors.red[300]!;
-
+  //late List<Todo> _todos;
   @override
   void initState() {
     super.initState();
-
+   // _todos = widget.todo as List<Todo>;
     if (widget.todo != null) {
       _textFieldController.text = widget.todo!.title;
       _textFieldController2.text = widget.todo!.description;
@@ -45,8 +45,11 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
     }).catchError((e) {
       print('Error opening database: $e');
     });
+    //_loadTodos();
   }
 
+
+  //add or update item
   Future<void> _addOrUpdateTodoItem(Todo? todo, String title,
       String description, String text, String color) async {
     if (todo != null) {
@@ -71,6 +74,8 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
     widget.onTodoUpdated();
   }
 
+
+  //get Priority
   Color _getPriorityColor(String color) {
     switch (color) {
       case 'red':
@@ -83,7 +88,22 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
         return Colors.grey;
     }
   }
+  Future<void> _loadTodos() async {
+    print('load todos of return list screen ');
+    try {
+      List<Todo> loadedTodos = await _todoProvider.getAllTodos();
 
+      setState(() {
+        //print("okokokokok-------${_todoProvider}");
+        loadedTodos.clear();
+        loadedTodos.addAll(loadedTodos);
+      });
+    } catch (e) {
+      print('Error loading todos: $e');
+    }
+  }
+
+  //dispose func
   @override
   void dispose() {
     // Dispose of the controllers to free up resources
@@ -118,7 +138,10 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Title',
-                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -138,7 +161,10 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Description',
-                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -158,7 +184,10 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Priorities',
-                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -170,9 +199,13 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                   children: <Widget>[
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: _selectedPriority == 'High' ? Colors.red[400] : Colors.grey,
+                        backgroundColor: _selectedPriority == 'High'
+                            ? Colors.red[400]
+                            : Colors.grey,
                         elevation: _selectedPriority == 'High' ? 20 : 5,
-                        minimumSize: _selectedPriority == 'High' ? const Size.square(45) : const Size.square(35),
+                        minimumSize: _selectedPriority == 'High'
+                            ? const Size.square(45)
+                            : const Size.square(35),
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
@@ -203,9 +236,13 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: _selectedPriority == 'Medium' ? Colors.orange[300] : Colors.grey,
+                        backgroundColor: _selectedPriority == 'Medium'
+                            ? Colors.orange[300]
+                            : Colors.grey,
                         elevation: _selectedPriority == 'Medium' ? 20 : 5,
-                        minimumSize: _selectedPriority == 'Medium' ? const Size.square(45) : const Size.square(35),
+                        minimumSize: _selectedPriority == 'Medium'
+                            ? const Size.square(45)
+                            : const Size.square(35),
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
@@ -230,9 +267,13 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: _selectedPriority == 'Low' ? Colors.blue[300] : Colors.grey,
+                        backgroundColor: _selectedPriority == 'Low'
+                            ? Colors.blue[300]
+                            : Colors.grey,
                         elevation: _selectedPriority == 'Low' ? 20 : 5,
-                        minimumSize: _selectedPriority == 'Low' ? const Size.square(45) : const Size.square(35),
+                        minimumSize: _selectedPriority == 'Low'
+                            ? const Size.square(45)
+                            : const Size.square(35),
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                         ),
@@ -256,7 +297,10 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 children: [
                   Text(
                     'Attachment',
-                    style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -300,7 +344,8 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 String text = _textFieldController3.text;
                 String color = getColorForPriority(_selectedPriority);
 
-                await _addOrUpdateTodoItem(widget.todo, title, description, text, color);
+                await _addOrUpdateTodoItem(
+                    widget.todo, title, description, text, color);
 
                 widget.onTodoUpdated();
 
@@ -363,6 +408,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
     }
   }
 
+  //get priority color
   String getColorForPriority(String selectedPriority) {
     if (selectedPriority == "High") {
       return "Red";
