@@ -5,7 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../component/custom_Button.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  String verificationId;
+
+  LoginScreen({super.key, required this.verificationId});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -17,8 +19,8 @@ class _LoginScreenState extends State<LoginScreen> {
   late String email;
   String password = '';
   bool showSpinner = false;
-
   bool _obscureText = true;
+  TextEditingController otpController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.black,
-
           title: const Text(
             'Sign in',
             style: TextStyle(
@@ -132,53 +133,103 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
               ),
+              const SizedBox(height: 10),
+              const Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(35, 0, 0, 5),
+                    child: Text(
+                      'OTP',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.8,
+                child: TextField(
+                  obscureText: false,
+                  controller: otpController,
+                  decoration: InputDecoration(
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: Colors.white, width: 2.0),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    hintText: 'OTP',
+                    prefixIcon: Icon(Icons.numbers, size: 24),
+                  ),
+                  style: const TextStyle(color: Colors.black, fontSize: 14),
+                ),
+              ),
               const SizedBox(height: 40),
               CustomButton(
-                  text: 'LOGIN',
-                  height: 44.0,
-                  // padding: const EdgeInsets.fromLTRB(120, 10, 120, 10),
-                  onPressed: () async {
-                    Future.delayed(const Duration(seconds: 1), () async {
-                      setState(() {
-                        showSpinner = true;
-                      });
-                      try {
-                        final user = await _auth.signInWithEmailAndPassword(
-                            email: email, password: password);
-                        if (user != null) {
-                          final SharedPreferences sharedpreferences =
-                              await SharedPreferences.getInstance();
-                          sharedpreferences.setString('email', email);
-                          Navigator.pushReplacementNamed(context, '/main');
-                        }
-                      } catch (e) {
-                        // Show a dialog with an error message
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Error'),
-                              content: const Text(
-                                  'Enter credentials and try again.'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
-                      setState(() {
-                        showSpinner = false;
-                      });
-                    });
+                text: 'LOGIN',
+                height: 44.0,
+                onPressed: () async {
+                  setState(() {
+                    showSpinner = true;
+                  });
+                  try {
+                    // Retrieve the verification ID from the arguments
+                    final String verificationId = ModalRoute.of(context)!.settings.arguments as String;
 
-                    //Navigator.pushNamed(context, '/main');
-                  }),
+                    // Create a PhoneAuthCredential with the code
+                    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                      verificationId: verificationId,
+                      smsCode: otpController.text.toString(),
+                    );
+
+                    // Sign in with the phone credential
+                    UserCredential phoneAuthUser = await _auth.signInWithCredential(credential);
+
+                    // If phone authentication is successful, proceed with email sign-in
+                    if (phoneAuthUser.user != null) {
+                      // Sign in with email and password
+                      UserCredential emailAuthUser = await _auth.signInWithEmailAndPassword(
+                        email: email,
+                        password: password,
+                      );
+
+                      if (emailAuthUser.user != null) {
+                        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                        sharedPreferences.setString('email', email);
+                        Navigator.pushReplacementNamed(context, '/main');
+                      }
+                    }
+                  } catch (e) {
+                    print('Authentication Error: $e');
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Error'),
+                          content: Text('Error: ${e.toString()}'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+
+                  setState(() {
+                    showSpinner = false;
+                  });
+                },
+              ),
+
               const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
