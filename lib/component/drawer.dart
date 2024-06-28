@@ -193,8 +193,8 @@ class DrawerApp extends ConsumerWidget {
                 ),
                 onTap: () async {
                   await ref
-                      .read(todoStateNotifierProvider.notifier);
-                      //.deleteAllTodos(context);
+                      .read(todoStateNotifierProvider.notifier)
+                      .deleteAllTodos(context);
                   Navigator.pop(context);
                 },
               ),
