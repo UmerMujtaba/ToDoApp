@@ -28,7 +28,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   void initState() {
     super.initState();
     _todoProvider = widget.todoProvider;
-
+    _loadTodos();
     openDatabase();
   }
 
@@ -44,6 +44,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       print('Error loading todos: $e');
     }
   }
+
+
+
 
   Future<void> _restoreTodos() async {
     try {
@@ -172,6 +175,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               ReturnList(
                 todos: todos,
                 todoProvider: _todoProvider,
+
               ),
             ],
           ),

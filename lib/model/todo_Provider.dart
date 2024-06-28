@@ -41,13 +41,14 @@ class TodoProvider {
     int id = await db.insert('todo', todo.toMap());
 
     // Insert into Firestore
-   // await firestore.collection('todos').doc(todo.uid).update(todo.toMap());
+    // await firestore.collection('todos').doc(todo.uid).update(todo.toMap());
     return id;
   }
 
   Future<List<Todo>> getAllTodos() async {
     if (db == null) {
-      throw Exception("Database is not initialized. Call open() before querying.");
+      throw Exception(
+          "Database is not initialized. Call open() before querying.");
     }
     final List<Map<String, dynamic>> maps = await db.query('todo');
     return List.generate(maps.length, (i) {
@@ -57,8 +58,8 @@ class TodoProvider {
 
   Future<int> update(Todo todo) async {
     await _checkDbInitialized();
-    int result = await db.update('todo', todo.toMap(),
-        where: 'id = ?', whereArgs: [todo.id]);
+    int result = await db
+        .update('todo', todo.toMap(), where: 'id = ?', whereArgs: [todo.id]);
 
     // Update Firestore
     var snapshots = await firestore
@@ -74,6 +75,13 @@ class TodoProvider {
   Future<int> delete(int id) async {
     return await db.delete('todo', where: 'id = ?', whereArgs: [id]);
   }
+
+  Future<void> deleteAllTodos() async {
+    //final db = await openDatabase('sample', version: 1);
+    await db.delete('todo'); // Adjust table name if necessary
+    //state = [];
+  }
+
   Future<void> close() async {
     await _checkDbInitialized();
     await db.close();

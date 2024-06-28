@@ -48,12 +48,21 @@ class TodoStateNotifier extends StateNotifier<List<Todo>> {
       await loadTodos(); // Ensure todos are loaded before backup
       print('Fetched ${state.length} todos: $state');
 
-      print('Backing up todos to Firestore...');
-      // Backup todos to Firestore using FirebaseService
-      // Adjust this based on your FirebaseService implementation
-      await ref
-          .read(firebaseServiceProvider)
-          .backupTodosToFirestore(state.cast<Todo>());
+      print('Fetching existing todos from Firestore...');
+      List<Todo> existingTodos =
+          await ref.read(firebaseServiceProvider).getTodosFromFirestore();
+
+      // Create a set of existing todo UIDs for quick lookup
+      Set<String> existingTodoUids =
+          existingTodos.map((todo) => todo.uid!).toSet();
+
+      // Filter out todos that already exist in Firestore
+      List<Todo> newTodos =
+          state.where((todo) => !existingTodoUids.contains(todo.uid)).toList();
+
+      print('Backing up ${newTodos.length} new todos to Firestore...');
+      // Backup new todos to Firestore
+      await ref.read(firebaseServiceProvider).backupTodosToFirestore(newTodos);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Backup successful.')),
@@ -72,7 +81,7 @@ class TodoStateNotifier extends StateNotifier<List<Todo>> {
   Future<void> restoreTodos(BuildContext context) async {
     try {
       List<Todo> restoredTodos =
-      await ref.read(todoProvider).restoreTodosFromFirestore();
+          await ref.read(todoProvider).restoreTodosFromFirestore();
       state = restoredTodos;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Restore successful.')),
@@ -82,6 +91,25 @@ class TodoStateNotifier extends StateNotifier<List<Todo>> {
         SnackBar(content: Text('Restore failed: $e')),
       );
       print('Restore failed: $e');
+    }
+  }
+
+  Future<void> deleteAllTodos(BuildContext context) async {
+    try {
+      print('Deleting all todos from local database...');
+      await ref.read(todoProvider).deleteAllTodos();
+
+      print('Deleting all todos from Firestore...');
+      await ref.read(firebaseServiceProvider).deleteAllTodosFromFirestore();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('All todos deleted successfully.')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete todos: $e')),
+      );
+      print('Failed to delete todos: $e');
     }
   }
 }

@@ -45,7 +45,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
     }).catchError((e) {
       print('Error opening database: $e');
     });
-    //_loadTodos();
+    _loadTodos();
   }
 
 
@@ -70,8 +70,9 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
         color: color,
       );
       await _todoProvider.insert(newTodo);
+
     }
-    widget.onTodoUpdated();
+    //widget.onTodoUpdated();
   }
 
 
@@ -94,7 +95,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
       List<Todo> loadedTodos = await _todoProvider.getAllTodos();
 
       setState(() {
-        //print("okokokokok-------${_todoProvider}");
+
         loadedTodos.clear();
         loadedTodos.addAll(loadedTodos);
       });
@@ -120,7 +121,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
       width: 360.0,
       height: 400.0,
       child: AlertDialog(
-        backgroundColor: Colors.grey,
+        backgroundColor: Colors.white,
         title: Text(
           widget.todo == null ? 'Create a Todo' : 'Update Todo',
           style: const TextStyle(
@@ -350,6 +351,7 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
                 widget.onTodoUpdated();
 
                 Navigator.of(context).pop(true);
+                await _loadTodos();
               },
               child: Padding(
                 padding: const EdgeInsets.all(10.0),

@@ -20,7 +20,7 @@ class StartScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
+                  height: screenHeight * 0.1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -34,7 +34,7 @@ class StartScreen extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(10)),
                               )),
                           onPressed: () {
-                            Navigator.pushNamed(context, '/');
+                            // Navigator.pushNamed(context, '/');
                             // Simulate a delay for loading
                             Future.delayed(const Duration(seconds: 1), () {
                               Navigator.pushReplacementNamed(
@@ -54,7 +54,7 @@ class StartScreen extends StatelessWidget {
                 ),
                 //const SizedBox(height: 80),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
+                  height: screenHeight * 0.5,
                   child: const Image(
                     image: AssetImage('assets/two.png'),
                     height: 350,
@@ -83,8 +83,8 @@ class StartScreen extends StatelessWidget {
             Opacity(
               opacity: 0.5,
               child: SizedBox(
-                height: MediaQuery.of(context).size.height * 0.2,
-                width: MediaQuery.of(context).size.width * 1,
+                height: screenHeight * 0.2,
+                width: screenWidth * 1,
                 child: const Image(
                   image: AssetImage('assets/5.png'),
                   //height: 185,

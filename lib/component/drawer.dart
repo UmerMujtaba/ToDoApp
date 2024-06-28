@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/todo_Class.dart';
 import '../model/todo_Provider.dart';
@@ -9,10 +10,10 @@ import '../services/firebase_Service.dart';
 
 class DrawerApp extends ConsumerWidget {
   final String title;
+
   // final List<Todo> todos; // Add todos parameter
 
   const DrawerApp({Key? key, required this.title});
-
 
   // final FirebaseService firebaseService = FirebaseService();
   // final TodoProvider todoProvider = TodoProvider();
@@ -62,7 +63,6 @@ class DrawerApp extends ConsumerWidget {
     );
   }
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final todoStateNotifier = ref.watch(todoStateNotifierProvider);
@@ -72,7 +72,6 @@ class DrawerApp extends ConsumerWidget {
             0.75, // 75% of screen will be occupied
         child: Drawer(
           backgroundColor: Colors.black,
-
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
@@ -108,8 +107,7 @@ class DrawerApp extends ConsumerWidget {
                     SizedBox(height: 30),
                     Row(
                       children: [
-                        Icon(Icons.person,
-                            size: 30, color: Colors.blueAccent),
+                        Icon(Icons.person, size: 30, color: Colors.blueAccent),
                         Padding(
                           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                           child: Text(
@@ -136,8 +134,7 @@ class DrawerApp extends ConsumerWidget {
                     SizedBox(height: 20),
                     Row(
                       children: [
-                        Icon(Icons.cake,
-                            size: 30, color: Colors.blueAccent),
+                        Icon(Icons.cake, size: 30, color: Colors.blueAccent),
                         Padding(
                           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                           child: Text(
@@ -188,21 +185,55 @@ class DrawerApp extends ConsumerWidget {
                 },
               ),
               ListTile(
+                leading: const Icon(Icons.delete_forever,
+                    size: 30, color: Colors.blueAccent),
+                title: const Text(
+                  'Delete all',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+                onTap: () async {
+                  await ref
+                      .read(todoStateNotifierProvider.notifier);
+                      //.deleteAllTodos(context);
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
                 leading: const Icon(Icons.workspace_premium,
                     size: 30, color: Colors.blueAccent),
-                title: const Text('Premium',style: TextStyle(fontSize: 16, color: Colors.white),),
+                title: const Text(
+                  'Premium',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, '/premium');
-                 // Navigator.pop(context); // Close
+                  Navigator.pop(context); // Close
                 },
               ),
               ListTile(
                 leading: const Icon(Icons.settings,
                     size: 30, color: Colors.blueAccent),
-                title: const Text('Setting',style: TextStyle(fontSize: 16, color: Colors.white),),
+                title: const Text(
+                  'Setting',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
                 onTap: () {
                   Navigator.pushNamed(context, '/setting');
-                  //Navigator.pop(context); // Close
+                  Navigator.pop(context); // Close
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout,
+                    size: 30, color: Colors.blueAccent),
+                title: const Text(
+                  'Log Out',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+                onTap: () async {
+                  final SharedPreferences sharedpreferences =
+                      await SharedPreferences.getInstance();
+                  sharedpreferences.remove('email');
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
             ],
@@ -212,5 +243,3 @@ class DrawerApp extends ConsumerWidget {
     );
   }
 }
-
-

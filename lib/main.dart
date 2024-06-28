@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
           '/login': (context) => const LoginScreen(),
           '/main': (context) => MainScreen(todoProvider: todoProvider),
           '/bar': (context) => const Bar(),
-          //'/drawer': (context) => DrawerApp(title: 'ok',),
+          '/drawer': (context) => DrawerApp(title: 'ok',),
           '/premium': (context) => const Premium(),
           '/setting': (context) => const Setting(),
         },
