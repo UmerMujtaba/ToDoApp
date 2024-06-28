@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
           '/': (context) => const Loading(),
           '/start': (context) => const StartScreen(),
           '/register': (context) => const RegistrationScreen(),
-          '/login': (context) => const LoginScreen(),
+          '/login': (context) =>  LoginScreen(verificationId: '',),
           '/main': (context) => MainScreen(todoProvider: todoProvider),
           '/bar': (context) => const Bar(),
           '/drawer': (context) => DrawerApp(title: 'ok',),
