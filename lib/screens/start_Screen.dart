@@ -34,7 +34,7 @@ class StartScreen extends StatelessWidget {
                                     BorderRadius.all(Radius.circular(10)),
                               )),
                           onPressed: () {
-                           // Navigator.pushNamed(context, '/');
+                            // Navigator.pushNamed(context, '/');
                             // Simulate a delay for loading
                             Future.delayed(const Duration(seconds: 1), () {
                               Navigator.pushReplacementNamed(

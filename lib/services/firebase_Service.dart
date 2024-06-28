@@ -5,37 +5,21 @@ import '../model/todo_Class.dart';
 class FirebaseService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<void> backupTodosToFirestore(List<Todo> todos) async {
-    try {
-      CollectionReference todosRef = _firestore.collection('todos');
-      todos.forEach((todo) async {
-        await todosRef.add(todo.toMap());
+  Future<List<Todo>> getTodosFromFirestore() async {
+    QuerySnapshot querySnapshot = await _firestore.collection('todos').get();
+    return querySnapshot.docs.map((doc) => Todo.fromMap(doc.data() as Map<String, dynamic>)).toList();
+  }
 
-      });
-      print('Backup successful'); // Check if this message is printed
-    } catch (e) {
-      print('Error backing up todos: $e'); // Check for any errors
+  Future<void> backupTodosToFirestore(List<Todo> todos) async {
+    for (Todo todo in todos) {
+      await _firestore.collection('todos').doc(todo.uid).set(todo.toMap());
     }
   }
 
-  // Future<List<Todo>> restoreTodosFromFirestore() async {
-  //   try {
-  //     QuerySnapshot snapshot = await _firestore.collection('todos').get();
-  //     List<Todo> todos = snapshot.docs
-  //         .map((doc) => Todo(
-  //
-  //       title: doc['title'],
-  //       description: doc['description'],
-  //       completed: doc['completed'],
-  //       text: doc['text'],
-  //       color: doc['color'],
-  //     ))
-  //         .toList();
-  //     return todos;
-  //   } catch (e) {
-  //     print('Error restoring todos from Firestore: $e');
-  //     return [];
-  //   }
-  // }
-
+  Future<void> deleteAllTodosFromFirestore() async {
+    QuerySnapshot querySnapshot = await _firestore.collection('todos').get();
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      await doc.reference.delete();
+    }
+  }
 }

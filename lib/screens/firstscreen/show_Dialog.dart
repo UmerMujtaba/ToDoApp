@@ -70,8 +70,9 @@ class _DisplayAlertDialogState extends State<DisplayAlertDialog> {
         color: color,
       );
       await _todoProvider.insert(newTodo);
+
     }
-    widget.onTodoUpdated();
+    //widget.onTodoUpdated();
   }
 
 
