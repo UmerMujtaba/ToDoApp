@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../component/custom_Button.dart';
+import '../services/email_verification.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key, required this.showLoginPage});
@@ -20,84 +21,58 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _passwordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  Future Signup() async {
+  Future<void> signup() async {
+    setState(() {
+      showSpinner = true;
+    });
     try {
       final UserCredential newUser = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
-
-      if (newUser.user != null) {
-        await FirebaseAuth.instance.verifyPhoneNumber(
-          phoneNumber: phoneController.text.toString(),
-          verificationCompleted: (PhoneAuthCredential credential) async {
-            // Automatically signs in the user
-            await _auth.signInWithCredential(credential);
-            Navigator.pushNamed(context, '/login');
-          },
-          verificationFailed: (FirebaseAuthException ex) {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Error'),
-                  content: Text('Phone verification failed: ${ex.message}'),
-                  actions: <Widget>[
-                    TextButton(
-                      child: const Text('OK'),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-          codeSent: (String verificationId, int? resendToken) {
-            // Navigate to the code entry screen
-            Navigator.pushNamed(
-              context,
-              '/login',
-              arguments: verificationId,
-            );
-          },
-          codeAutoRetrievalTimeout: (String verificationId) {
-            // Handle timeout scenario
-            print('Code auto retrieval timeout');
-          },
+      if (_auth.currentUser != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => EmailVerificationScreen(
+              phoneNumber: phoneController.text.trim(),
+            ),
+          ),
         );
       }
     } on FirebaseAuthException catch (e) {
       print(e);
       if (e.code == 'weak-password') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('The password provided is too weak.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('The password provided is too weak.')),
+        );
       } else if (e.code == 'email-already-in-use') {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text('The account already exists for that email.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('The account already exists for that email.')),
+        );
       }
-      return null;
+      setState(() {
+        showSpinner = false;
+      });
     } catch (e) {
       debugPrint(e.toString());
-      return null;
+      setState(() {
+        showSpinner = false;
+      });
     }
-    setState(() {
-      showSpinner = false;
-    });
   }
-
   @override
   void dispose() {
+
     _emailController.dispose();
     _passwordController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
-    //final Orientation orientation = MediaQuery.of(context).orientation;
 
     return SafeArea(
       child: Scaffold(
@@ -335,7 +310,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           setState(() {
                             showSpinner = true;
                           });
-                          Signup();
+                          signup();
                         },
                       ),
                     ],
