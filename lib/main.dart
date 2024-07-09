@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:todoapp/screens/forgot_password_screen.dart';
 import 'package:todoapp/screens/login_Screen.dart';
 import 'package:todoapp/screens/registeration_Screen.dart';
 import 'component/loader.dart';
@@ -46,13 +47,14 @@ class _MyAppState extends State<MyApp> {
         routes: {
           '/': (context) => const Loading(),
           '/start': (context) => const StartScreen(),
-          '/register': (context) => const RegistrationScreen(),
-          '/login': (context) =>  LoginScreen(verificationId: '',),
+          '/register': (context) =>  RegistrationScreen(showLoginPage: () {},),
+          '/login': (context) =>  LoginScreen(verificationId: '', showRegisterPage: () {  },),
           '/main': (context) => MainScreen(todoProvider: todoProvider),
           '/bar': (context) => const Bar(),
           '/drawer': (context) => DrawerApp(title: 'ok',),
           '/premium': (context) => const Premium(),
           '/setting': (context) => const Setting(),
+          '/forgot': (context) => const ForgotPasswordScreen(),
         },
       ),
     );
