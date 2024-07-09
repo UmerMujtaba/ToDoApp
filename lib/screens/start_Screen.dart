@@ -37,7 +37,7 @@ class StartScreen extends StatelessWidget {
                             // Navigator.pushNamed(context, '/');
                             // Simulate a delay for loading
                             Future.delayed(const Duration(seconds: 1), () {
-                              Navigator.pushReplacementNamed(
+                              Navigator.pushNamed(
                                   context, '/register');
                             });
                           },

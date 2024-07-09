@@ -4,7 +4,9 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../component/custom_Button.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({super.key});
+  const RegistrationScreen({super.key, required this.showLoginPage});
+
+  final VoidCallback showLoginPage;
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -12,16 +14,108 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
-  late String email;
-  String password = '';
   bool showSpinner = false;
   bool _obscureText = true;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+
+  Future Signup() async{
+    try {
+      final UserCredential newUser =
+      await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      if (newUser.user != null) {
+        await FirebaseAuth.instance.verifyPhoneNumber(
+          phoneNumber: phoneController.text.toString(),
+          verificationCompleted:
+              (PhoneAuthCredential credential) async {
+            // Automatically signs in the user
+            await _auth.signInWithCredential(credential);
+            Navigator.pushNamed(
+                context, '/login');
+          },
+          verificationFailed: (FirebaseAuthException ex) {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Error'),
+                  content: Text(
+                      'Phone verification failed: ${ex.message}'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('OK'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          codeSent:
+              (String verificationId, int? resendToken) {
+            // Navigate to the code entry screen
+            Navigator.pushNamed(
+              context,
+              '/login',
+              arguments: verificationId,
+            );
+          },
+          codeAutoRetrievalTimeout:
+              (String verificationId) {
+            // Handle timeout scenario
+            print('Code auto retrieval timeout');
+          },
+        );
+      }
+    } catch (e) {
+      print(e);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text(
+                'Enter Credentials, please try again.'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+    setState(() {
+      showSpinner = false;
+    });
+  }
+
+  @override
+  void dispose() {
+  _emailController.dispose();
+  _passwordController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     //final Orientation orientation = MediaQuery.of(context).orientation;
 
     return SafeArea(
@@ -94,7 +188,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           child: TextField(
                             decoration: InputDecoration(
                               prefixIcon:
-                                  const Icon(Icons.text_fields, size: 24),
+                              const Icon(Icons.text_fields, size: 24),
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
@@ -130,10 +224,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             keyboardType: TextInputType.emailAddress,
                             // obscureText: true,
                             enableSuggestions: true,
+                            controller: _emailController,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: Colors.white,
-
                               prefixIcon: const Icon(Icons.email, size: 24),
                               border: OutlineInputBorder(
                                 borderSide: const BorderSide(
@@ -142,10 +236,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               ),
                               hintText: 'Enter Email',
                             ),
-                            onChanged: (value) {
-                              email = value;
-                              //Do something with the user input.
-                            },
+
                             style: const TextStyle(
                                 color: Colors.black, fontSize: 14),
                           ),
@@ -170,6 +261,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               horizontal: 30, vertical: 5),
                           child: TextField(
                             obscureText: _obscureText,
+                            controller: _passwordController,
                             decoration: InputDecoration(
                               prefixIcon: const Icon(Icons.lock, size: 24),
                               filled: true,
@@ -193,10 +285,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 },
                               ),
                             ),
-                            onChanged: (value) {
-                              password = value;
-                              //Do something with the user input.
-                            },
                             style: const TextStyle(
                                 color: Colors.black, fontSize: 14),
                           ),
@@ -252,10 +340,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         height: 44.0,
                         onPressed: () async {
                           setState(() {
+
                             showSpinner = true;
                           });
 
-                          Navigator.pushReplacementNamed(context, '/login');
+                          widget.showLoginPage;
                         },
                       ),
                       const SizedBox(width: 20),
@@ -266,80 +355,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           setState(() {
                             showSpinner = true;
                           });
-                          try {
-                            final UserCredential newUser = await _auth.createUserWithEmailAndPassword(
-                              email: email,
-                              password: password,
-                            );
-
-                            if (newUser.user != null) {
-                              await FirebaseAuth.instance.verifyPhoneNumber(
-                                phoneNumber: phoneController.text.toString(),
-                                verificationCompleted: (PhoneAuthCredential credential) async {
-                                  // Automatically signs in the user
-                                  await _auth.signInWithCredential(credential);
-                                  Navigator.pushReplacementNamed(context, '/login');
-                                },
-                                verificationFailed: (FirebaseAuthException ex) {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: const Text('Error'),
-                                        content: Text('Phone verification failed: ${ex.message}'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            child: const Text('OK'),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                codeSent: (String verificationId, int? resendToken) {
-                                  // Navigate to the code entry screen
-                                  Navigator.pushNamed(
-                                    context,
-                                    '/login',
-                                    arguments: verificationId,
-                                  );
-                                },
-                                codeAutoRetrievalTimeout: (String verificationId) {
-                                  // Handle timeout scenario
-                                  print('Code auto retrieval timeout');
-                                },
-                              );
-                            }
-                          } catch (e) {
-                            print(e);
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Error'),
-                                  content: const Text('Enter Credentials, please try again.'),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: const Text('OK'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                          setState(() {
-                            showSpinner = false;
-                          });
+                          Signup();
                         },
                       ),
-
-
                     ],
                   ),
                 )

@@ -6,8 +6,12 @@ import '../component/custom_Button.dart';
 
 class LoginScreen extends StatefulWidget {
   String verificationId;
+  final VoidCallback showRegisterPage;
 
-  LoginScreen({super.key, required this.verificationId});
+  LoginScreen(
+      {super.key,
+      required this.verificationId,
+      required this.showRegisterPage});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -31,16 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          backgroundColor: Colors.black,
-          title: const Text(
-            'Sign in',
-            style: TextStyle(
-                color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-          centerTitle: true,
-        ),
         backgroundColor: Colors.black,
         body: SizedBox(
           // color: Colors.red,
@@ -49,6 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Text('HELLO AGAIN',style: TextStyle(color: Colors.white,fontSize: 32),),
               const Row(
                 children: [
                   Padding(
@@ -168,7 +163,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: const TextStyle(color: Colors.black, fontSize: 14),
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 45),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, '/forgot');
+                      },
+                      child: const Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: Colors.lightBlue, fontSize: 13),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
               CustomButton(
                 text: 'LOGIN',
                 height: 44.0,
@@ -178,29 +191,34 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                   try {
                     // Retrieve the verification ID from the arguments
-                    final String verificationId = ModalRoute.of(context)!.settings.arguments as String;
+                    final String verificationId =
+                        ModalRoute.of(context)!.settings.arguments as String;
 
                     // Create a PhoneAuthCredential with the code
-                    PhoneAuthCredential credential = PhoneAuthProvider.credential(
+                    PhoneAuthCredential credential =
+                        PhoneAuthProvider.credential(
                       verificationId: verificationId,
                       smsCode: otpController.text.toString(),
                     );
 
                     // Sign in with the phone credential
-                    UserCredential phoneAuthUser = await _auth.signInWithCredential(credential);
+                    UserCredential phoneAuthUser =
+                        await _auth.signInWithCredential(credential);
 
                     // If phone authentication is successful, proceed with email sign-in
                     if (phoneAuthUser.user != null) {
                       // Sign in with email and password
-                      UserCredential emailAuthUser = await _auth.signInWithEmailAndPassword(
+                      UserCredential emailAuthUser =
+                          await _auth.signInWithEmailAndPassword(
                         email: email,
                         password: password,
                       );
 
                       if (emailAuthUser.user != null) {
-                        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                        final SharedPreferences sharedPreferences =
+                            await SharedPreferences.getInstance();
                         sharedPreferences.setString('email', email);
-                        Navigator.pushReplacementNamed(context, '/main');
+                        Navigator.pushNamed(context, '/main');
                       }
                     }
                   } catch (e) {
@@ -229,7 +247,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                 },
               ),
-
               const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -301,13 +318,18 @@ class _LoginScreenState extends State<LoginScreen> {
                 onTap: () {
                   Navigator.pushNamed(context, '/register');
                 },
-                child: const Text(
-                  'REGISTER',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2),
+                child: GestureDetector(
+                  onTap: () {
+                    widget.showRegisterPage;
+                  },
+                  child: const Text(
+                    'REGISTER',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 2),
+                  ),
                 ),
               )
             ],
