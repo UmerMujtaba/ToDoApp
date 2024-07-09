@@ -19,7 +19,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.currentUser?.sendEmailVerification();
-    timer = Timer.periodic(const Duration(seconds: 4), (_) => checkEmailVerified());
+    timer = Timer.periodic(const Duration(seconds: 1), (_) => checkEmailVerified());
   }
 
   Future<void> checkEmailVerified() async {
