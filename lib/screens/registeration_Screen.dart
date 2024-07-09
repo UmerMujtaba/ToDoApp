@@ -20,10 +20,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _passwordController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
 
-  Future Signup() async{
+  Future Signup() async {
     try {
-      final UserCredential newUser =
-      await _auth.createUserWithEmailAndPassword(
+      final UserCredential newUser = await _auth.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
@@ -31,12 +30,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       if (newUser.user != null) {
         await FirebaseAuth.instance.verifyPhoneNumber(
           phoneNumber: phoneController.text.toString(),
-          verificationCompleted:
-              (PhoneAuthCredential credential) async {
+          verificationCompleted: (PhoneAuthCredential credential) async {
             // Automatically signs in the user
             await _auth.signInWithCredential(credential);
-            Navigator.pushNamed(
-                context, '/login');
+            Navigator.pushNamed(context, '/login');
           },
           verificationFailed: (FirebaseAuthException ex) {
             showDialog(
@@ -44,8 +41,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: const Text('Error'),
-                  content: Text(
-                      'Phone verification failed: ${ex.message}'),
+                  content: Text('Phone verification failed: ${ex.message}'),
                   actions: <Widget>[
                     TextButton(
                       child: const Text('OK'),
@@ -58,8 +54,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               },
             );
           },
-          codeSent:
-              (String verificationId, int? resendToken) {
+          codeSent: (String verificationId, int? resendToken) {
             // Navigate to the code entry screen
             Navigator.pushNamed(
               context,
@@ -67,33 +62,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               arguments: verificationId,
             );
           },
-          codeAutoRetrievalTimeout:
-              (String verificationId) {
+          codeAutoRetrievalTimeout: (String verificationId) {
             // Handle timeout scenario
             print('Code auto retrieval timeout');
           },
         );
       }
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
       print(e);
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Error'),
-            content: const Text(
-                'Enter Credentials, please try again.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      if (e.code == 'weak-password') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The password provided is too weak.')));
+      } else if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('The account already exists for that email.')));
+      }
+      return null;
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
     }
     setState(() {
       showSpinner = false;
@@ -102,20 +89,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   void dispose() {
-  _emailController.dispose();
-  _passwordController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
     //final Orientation orientation = MediaQuery.of(context).orientation;
 
     return SafeArea(
@@ -188,7 +169,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           child: TextField(
                             decoration: InputDecoration(
                               prefixIcon:
-                              const Icon(Icons.text_fields, size: 24),
+                                  const Icon(Icons.text_fields, size: 24),
                               filled: true,
                               fillColor: Colors.white,
                               border: OutlineInputBorder(
@@ -340,7 +321,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         height: 44.0,
                         onPressed: () async {
                           setState(() {
-
                             showSpinner = true;
                           });
 
