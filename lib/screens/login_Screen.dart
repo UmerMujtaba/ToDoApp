@@ -26,6 +26,61 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscureText = true;
   TextEditingController otpController = TextEditingController();
 
+
+  Future Login() async{
+    try {
+      // Retrieve the verification ID from the arguments
+      final String verificationId =
+      ModalRoute.of(context)!.settings.arguments as String;
+
+      // Create a PhoneAuthCredential with the code
+      PhoneAuthCredential credential =
+      PhoneAuthProvider.credential(
+        verificationId: verificationId,
+        smsCode: otpController.text.toString(),
+      );
+
+      // Sign in with the phone credential
+      UserCredential phoneAuthUser =
+          await _auth.signInWithCredential(credential);
+
+      // If phone authentication is successful, proceed with email sign-in
+      if (phoneAuthUser.user != null) {
+        // Sign in with email and password
+        UserCredential emailAuthUser =
+            await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+
+        if (emailAuthUser.user != null) {
+          final SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          sharedPreferences.setString('email', email);
+          Navigator.pushNamed(context, '/main');
+        }
+      }
+    } catch (e) {
+      print('Authentication Error: $e');
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: Text('Error: ${e.toString()}'),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -189,58 +244,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   setState(() {
                     showSpinner = true;
                   });
-                  try {
-                    // Retrieve the verification ID from the arguments
-                    final String verificationId =
-                        ModalRoute.of(context)!.settings.arguments as String;
-
-                    // Create a PhoneAuthCredential with the code
-                    PhoneAuthCredential credential =
-                        PhoneAuthProvider.credential(
-                      verificationId: verificationId,
-                      smsCode: otpController.text.toString(),
-                    );
-
-                    // Sign in with the phone credential
-                    UserCredential phoneAuthUser =
-                        await _auth.signInWithCredential(credential);
-
-                    // If phone authentication is successful, proceed with email sign-in
-                    if (phoneAuthUser.user != null) {
-                      // Sign in with email and password
-                      UserCredential emailAuthUser =
-                          await _auth.signInWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
-
-                      if (emailAuthUser.user != null) {
-                        final SharedPreferences sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        sharedPreferences.setString('email', email);
-                        Navigator.pushNamed(context, '/main');
-                      }
-                    }
-                  } catch (e) {
-                    print('Authentication Error: $e');
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Error'),
-                          content: Text('Error: ${e.toString()}'),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  }
+                 Login();
 
                   setState(() {
                     showSpinner = false;
