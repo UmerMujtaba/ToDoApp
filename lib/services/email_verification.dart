@@ -13,6 +13,7 @@ class EmailVerificationScreen extends StatefulWidget {
 
 class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   bool isEmailVerified = false;
+  bool isSnackbarDisplayed = false; // Track whether snackbar has been displayed
   Timer? timer;
 
   @override
@@ -28,9 +29,10 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       isEmailVerified = FirebaseAuth.instance.currentUser!.emailVerified;
     });
 
-    if (isEmailVerified) {
+    if (isEmailVerified && !isSnackbarDisplayed) { // Check if email is verified and snackbar is not displayed
       ScaffoldMessenger.of(context)
           .showSnackBar(const SnackBar(content: Text("Email Successfully Verified")));
+      isSnackbarDisplayed = true; // Mark snackbar as displayed
 
       timer?.cancel();
       await verifyPhoneNumber();
